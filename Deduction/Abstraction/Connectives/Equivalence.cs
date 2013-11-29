@@ -5,8 +5,7 @@ namespace Deduction.Abstraction.Connectives
     {
         public override bool Operation(bool first, bool second)
         {
-            // TODO implement
-            return false;
+            return !(first && !second) && !(!first && second);
         }
     }
 }
