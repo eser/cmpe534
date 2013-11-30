@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Deduction.Abstraction;
 using Deduction.Abstraction.Connectives;
+using Deduction.Abstraction.Constants;
 
 namespace Deduction.Parsing
 {
@@ -27,7 +28,7 @@ namespace Deduction.Parsing
                     break;
                 }
 
-                if (char.IsLetter(curr.Value))
+                if (char.IsUpper(curr.Value))
                 {
                     PropositionSymbol symbol = new PropositionSymbol(curr.Value);
                     members.Add(symbol);
@@ -42,13 +43,32 @@ namespace Deduction.Parsing
                 }
                 else
                 {
+                    bool found = false;
+
                     foreach (KeyValuePair<char, Type> pair in SymbolRegistry.Instance.Connectives)
                     {
                         if (curr.Value == pair.Key)
                         {
                             IConnective connectiveInstance = (IConnective)Activator.CreateInstance(pair.Value);
                             members.Add(connectiveInstance);
+
+                            found = true;
                             break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        foreach (KeyValuePair<char, Type> pair in SymbolRegistry.Instance.Constants)
+                        {
+                            if (curr.Value == pair.Key)
+                            {
+                                IConstant constantInstance = (IConstant)Activator.CreateInstance(pair.Value);
+                                members.Add(constantInstance);
+
+                                found = true;
+                                break;
+                            }
                         }
                     }
                 }

@@ -1,6 +1,6 @@
 ﻿using System;
-using Deduction.Abstraction.Connectives;
 using Deduction.Parsing;
+using Deduction.Processors;
 
 namespace Deduction
 {
@@ -8,15 +8,15 @@ namespace Deduction
     {
         public static void Main(string[] args)
         {
-            string prop = "(A & B) | (B & C) | (!C & D)";
+            string prop = "(A & A) | (B & C) | (!C & D) | !!!(!f)";
 
             Parser parser = new Parser(prop);
             var members = parser.Parse();
+            var simplified = Simplifier.Simplify(members);
+            var dumped = Dumper.GetString(simplified);
 
-            var dumped = Dumper.GetString(members);
-
-            Console.WriteLine("prop   = {0}", prop);
-            Console.WriteLine("dumper = {0}", dumped);
+            Console.WriteLine("prop       = {0}", prop);
+            Console.WriteLine("dumper     = {0}", dumped);
 
             Console.Read();
         }

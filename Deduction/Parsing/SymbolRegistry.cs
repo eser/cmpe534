@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Deduction.Abstraction.Connectives;
+using Deduction.Abstraction.Constants;
 
 namespace Deduction.Parsing
 {
@@ -8,11 +9,21 @@ namespace Deduction.Parsing
     {
         protected static SymbolRegistry instance = null;
         protected readonly Dictionary<char, Type> connectives;
+        protected readonly Dictionary<char, Type> constants;
 
-        public Dictionary<char, Type> Connectives {
+        public Dictionary<char, Type> Connectives
+        {
             get
             {
                 return this.connectives;
+            }
+        }
+
+        public Dictionary<char, Type> Constants
+        {
+            get
+            {
+                return this.constants;
             }
         }
 
@@ -37,11 +48,30 @@ namespace Deduction.Parsing
                 { '|', typeof(Or) },
                 { '!', typeof(Not) }
             };
+
+            this.constants = new Dictionary<char, Type>()
+            {
+                { 't', typeof(True) },
+                { 'f', typeof(False) }
+            };
         }
 
-        public static char? GetSymbol(Type type)
+        public static char? GetConnectiveSymbol(Type type)
         {
             foreach (KeyValuePair<char, Type> pair in SymbolRegistry.Instance.Connectives)
+            {
+                if (pair.Value == type)
+                {
+                    return pair.Key;
+                }
+            }
+
+            return null;
+        }
+
+        public static char? GetConstantSymbol(Type type)
+        {
+            foreach (KeyValuePair<char, Type> pair in SymbolRegistry.Instance.Constants)
             {
                 if (pair.Value == type)
                 {

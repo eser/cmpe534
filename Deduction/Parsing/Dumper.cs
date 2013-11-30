@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Deduction.Abstraction;
 using Deduction.Abstraction.Connectives;
+using Deduction.Abstraction.Constants;
 
 namespace Deduction.Parsing
 {
@@ -18,7 +19,7 @@ namespace Deduction.Parsing
                 }
                 else if (member is BinaryConnectiveBase)
                 {
-                    char? symbol = SymbolRegistry.GetSymbol(member.GetType());
+                    char? symbol = SymbolRegistry.GetConnectiveSymbol(member.GetType());
                     if (symbol.HasValue)
                     {
                         final += " " + symbol.Value + " ";
@@ -26,7 +27,15 @@ namespace Deduction.Parsing
                 }
                 else if (member is UnaryConnectiveBase)
                 {
-                    char? symbol = SymbolRegistry.GetSymbol(member.GetType());
+                    char? symbol = SymbolRegistry.GetConnectiveSymbol(member.GetType());
+                    if (symbol.HasValue)
+                    {
+                        final += symbol.Value;
+                    }
+                }
+                else if (member is ConstantBase)
+                {
+                    char? symbol = SymbolRegistry.GetConstantSymbol(member.GetType());
                     if (symbol.HasValue)
                     {
                         final += symbol.Value;

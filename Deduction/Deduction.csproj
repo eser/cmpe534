@@ -45,8 +45,11 @@
     <Compile Include="Abstraction\Connectives\UnaryConnectiveBase.cs" />
     <Compile Include="Abstraction\Connectives\IConnective.cs" />
     <Compile Include="Abstraction\Connectives\And.cs" />
+    <Compile Include="Abstraction\Constants\ConstantBase.cs" />
+    <Compile Include="Abstraction\Constants\False.cs" />
+    <Compile Include="Abstraction\Constants\IConstant.cs" />
+    <Compile Include="Abstraction\Constants\True.cs" />
     <Compile Include="Abstraction\PropositionArray.cs" />
-    <Compile Include="Abstraction\False.cs" />
     <Compile Include="Abstraction\Connectives\Equivalence.cs" />
     <Compile Include="Abstraction\Connectives\Implication.cs" />
     <Compile Include="Abstraction\Connectives\Not.cs" />
@@ -56,6 +59,7 @@
     <Compile Include="Parsing\SymbolRegistry.cs" />
     <Compile Include="Parsing\Dumper.cs" />
     <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Processors\Simplifier.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
