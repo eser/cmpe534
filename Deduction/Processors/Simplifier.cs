@@ -14,8 +14,9 @@ namespace Deduction.Processors
             List<IPropositionMember> simplified;
 
             simplified = Simplifier.RedundantParanthesis(members);
+            simplified = Simplifier.RedundantNots(simplified);
+            simplified = Simplifier.MergeOperators(simplified);
             simplified = Simplifier.RedundantConnectives(simplified);
-            simplified = Simplifier.SimplifyConnectives(simplified);
 
             return simplified;
         }
@@ -31,6 +32,32 @@ namespace Deduction.Processors
             }
 
             return true;
+        }
+
+        public static Type GetCommonBinaryConnectiveType(IEnumerable<IPropositionMember> members)
+        {
+            Type binaryConnectiveType = null;
+
+            foreach (IPropositionMember arrayMember in members)
+            {
+                if (!(arrayMember is BinaryConnectiveBase))
+                {
+                    continue;
+                }
+
+                if (binaryConnectiveType == null)
+                {
+                    binaryConnectiveType = arrayMember.GetType();
+                    continue;
+                }
+
+                if (binaryConnectiveType != arrayMember.GetType())
+                {
+                    return null;
+                }
+            }
+
+            return binaryConnectiveType;
         }
 
         public static List<IPropositionMember> RedundantParanthesis(IEnumerable<IPropositionMember> members)
@@ -58,10 +85,10 @@ namespace Deduction.Processors
             return final;
         }
 
-        public static List<IPropositionMember> RedundantConnectives(IEnumerable<IPropositionMember> members)
+        public static List<IPropositionMember> RedundantNots(IEnumerable<IPropositionMember> members)
         {
             List<IPropositionMember> final = new List<IPropositionMember>();
-            Stack<UnaryConnectiveBase> stack = new Stack<UnaryConnectiveBase>();
+            Stack<Not> stack = new Stack<Not>();
 
             foreach (IPropositionMember member in members)
             {
@@ -75,7 +102,7 @@ namespace Deduction.Processors
                     stack.Clear();
 
                     PropositionArray array = member as PropositionArray;
-                    List<IPropositionMember> newArray = Simplifier.RedundantConnectives(array.Items);
+                    List<IPropositionMember> newArray = Simplifier.RedundantNots(array.Items);
 
                     if (Simplifier.HasOnlyLiterals(newArray))
                     {
@@ -86,13 +113,13 @@ namespace Deduction.Processors
                         final.Add(new PropositionArray(newArray));
                     }
                 }
-                else if (member is UnaryConnectiveBase)
+                else if (member is Not)
                 {
-                    UnaryConnectiveBase connective = member as UnaryConnectiveBase;
+                    Not connective = member as Not;
 
                     if (stack.Count > 0)
                     {
-                        UnaryConnectiveBase lastConnective = stack.Peek();
+                        Not lastConnective = stack.Peek();
 
                         if (lastConnective.GetType() == member.GetType())
                         {
@@ -129,59 +156,139 @@ namespace Deduction.Processors
             return final;
         }
 
-        public static List<IPropositionMember> SimplifyConnectives(IEnumerable<IPropositionMember> members)
+        public static List<IPropositionMember> MergeOperators(IEnumerable<IPropositionMember> members)
         {
-            List<IPropositionMember> stack = new List<IPropositionMember>();
-            List<IPropositionMember> queue = new List<IPropositionMember>(members);
-            int pos = 0;
+            List<IPropositionMember> final = new List<IPropositionMember>();
+            Type membersCommonBinaryConnectiveType = Simplifier.GetCommonBinaryConnectiveType(members);
 
-            while (pos < queue.Count)
+            foreach (IPropositionMember member in members)
             {
-                IPropositionMember nextInLine = queue[pos];
-
-                if (nextInLine is PropositionArray)
+                if (member is PropositionArray)
                 {
-                    PropositionArray array = nextInLine as PropositionArray;
-                    List<IPropositionMember> newArray = Simplifier.SimplifyConnectives(array.Items);
+                    PropositionArray array = member as PropositionArray;
 
-                    if (Simplifier.HasOnlyLiterals(newArray))
+                    IList<IPropositionMember> arrayMembers = Simplifier.MergeOperators(array.Items);
+                    Type arrayMembersCommonBinaryConnectiveType = Simplifier.GetCommonBinaryConnectiveType(arrayMembers);
+                    if (arrayMembersCommonBinaryConnectiveType != null && arrayMembersCommonBinaryConnectiveType == membersCommonBinaryConnectiveType)
                     {
-                        stack.AddRange(newArray);
+                        final.AddRange(arrayMembers);
                     }
                     else
                     {
-                        stack.Add(new PropositionArray(newArray));
+                        final.Add(new PropositionArray(arrayMembers));
+                    }
+
+                    continue;
+                }
+
+                final.Add(member);
+            }
+
+            return final;
+        }
+
+        public static List<IPropositionMember> RedundantConnectives(IEnumerable<IPropositionMember> members)
+        {
+            List<IPropositionMember> final = new List<IPropositionMember>();
+            List<IPropositionMember> stack = new List<IPropositionMember>();
+            Type lastConnectiveType = null;
+
+            foreach (IPropositionMember member in members)
+            {
+                if (member is PropositionArray)
+                {
+                    PropositionArray array = member as PropositionArray;
+
+                    IList<IPropositionMember> arrayMembers = Simplifier.RedundantConnectives(array.Items);
+
+                    if (Simplifier.HasOnlyLiterals(arrayMembers))
+                    {
+                        stack.AddRange(arrayMembers);
+                    }
+                    else
+                    {
+                        stack.Add(new PropositionArray(arrayMembers));
                     }
                 }
-                else if (nextInLine is BinaryConnectiveBase)
+                else if (member is BinaryConnectiveBase)
                 {
-                    int lastIndice = stack.Count - 1;
-                    IPropositionMember lastItem = stack[lastIndice];
-                    IPropositionMember[] nextItemArray = new IPropositionMember[queue.Count - pos - 1];
-                    queue.CopyTo(pos + 1, nextItemArray, 0, nextItemArray.Length);
+                    BinaryConnectiveBase binaryConnective = member as BinaryConnectiveBase;
+                    Type binaryConnectiveType = binaryConnective.GetType();
 
-                    BinaryConnectiveBase connective = nextInLine as BinaryConnectiveBase;
-                    List<IPropositionMember> simplified = connective.Simplify(lastItem, nextItemArray);
-
-                    if (simplified == null)
+                    if (lastConnectiveType == null)
                     {
-                        stack.Add(connective);
+                        lastConnectiveType = binaryConnectiveType;
                     }
-                    else
+                    else if (lastConnectiveType != binaryConnectiveType)
                     {
-                        stack.RemoveAt(lastIndice);
-                        stack.AddRange(simplified);
+                        if (stack.Count > 0) {
+                            // remove redundants
+                            stack = Simplifier.RedundantConnectivesStackSimplification(stack);
+
+                            IPropositionMember lastItem = null;
+                            foreach (IPropositionMember stackMember in stack)
+                            {
+                                if ((lastItem == null || !(lastItem is UnaryConnectiveBase)) && final.Count > 0)
+                                {
+                                    final.Add(Activator.CreateInstance(lastConnectiveType) as IPropositionMember);
+                                }
+
+                                final.Add(stackMember);
+                                lastItem = stackMember;
+                            }
+
+                            stack.Clear();
+                        }
+
+                        lastConnectiveType = binaryConnectiveType;
                     }
                 }
                 else
                 {
-                    stack.Add(nextInLine);
+                    stack.Add(member);
                 }
-
-                pos++;
             }
 
-            return stack;
+            if (stack.Count > 0)
+            {
+                // remove redundants
+                stack = Simplifier.RedundantConnectivesStackSimplification(stack);
+
+                IPropositionMember lastItem = null;
+                foreach (IPropositionMember stackMember in stack)
+                {
+                    if ((lastItem == null || !(lastItem is UnaryConnectiveBase)) && final.Count > 0)
+                    {
+                        final.Add(Activator.CreateInstance(lastConnectiveType) as IPropositionMember);
+                    }
+
+                    final.Add(stackMember);
+                    lastItem = stackMember;
+                }
+            }
+
+            return final;
+        }
+
+        protected static List<IPropositionMember> RedundantConnectivesStackSimplification(IEnumerable<IPropositionMember> members)
+        {
+            List<IPropositionMember> final = new List<IPropositionMember>(members);
+
+            for (int i = 0; i < final.Count - 1; i++)
+            {
+                for (int j = i + 1; j < final.Count; )
+                {
+                    if (final[i].Equals(final[j]))
+                    {
+                        final.RemoveAt(j);
+                        // continue;
+                    }
+
+                    j++;
+                }
+            }
+
+            return final;
         }
     }
 }

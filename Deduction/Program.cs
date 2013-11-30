@@ -8,7 +8,7 @@ namespace Deduction
     {
         public static void Main(string[] args)
         {
-            string prop = "(A & A) | (B & C) | (!C & D) | !!!(!f)";
+            string prop = "(((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f";
 
             Parser parser = new Parser(prop);
             var members = parser.Parse();
