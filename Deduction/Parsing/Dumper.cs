@@ -12,11 +12,7 @@ namespace Deduction.Parsing
 
             foreach (IPropositionMember member in input.Items)
             {
-                if (member is PropositionSymbol)
-                {
-                    final += (member as PropositionSymbol).Letter;
-                }
-                else if (member is BinaryConnectiveBase)
+                if (member is BinaryConnectiveBase)
                 {
                     char? symbol = SymbolRegistry.GetConnectiveSymbol(member.GetType());
                     if (symbol.HasValue)
@@ -32,17 +28,42 @@ namespace Deduction.Parsing
                         final += symbol.Value;
                     }
                 }
+                else if (member is PropositionSymbol)
+                {
+                    PropositionSymbol symbol = member as PropositionSymbol;
+
+                    if (symbol.Negated)
+                    {
+                        final += "!";
+                    }
+
+                    final += symbol.Letter;
+                }
                 else if (member is ConstantBase)
                 {
-                    char? symbol = SymbolRegistry.GetConstantSymbol(member.GetType());
-                    if (symbol.HasValue)
+                    ConstantBase constant = member as ConstantBase;
+
+                    if (constant.Negated)
                     {
-                        final += symbol.Value;
+                        final += "!";
+                    }
+
+                    char? constantChar = SymbolRegistry.GetConstantSymbol(member.GetType());
+                    if (constantChar.HasValue)
+                    {
+                        final += constantChar.Value;
                     }
                 }
                 else if (member is PropositionArray)
                 {
-                    final += "(" + Dumper.GetString(member as PropositionArray) + ")";
+                    PropositionArray array = member as PropositionArray;
+
+                    if (array.Negated)
+                    {
+                        final += "!";
+                    }
+
+                    final += "(" + Dumper.GetString(array) + ")";
                 }
             }
 

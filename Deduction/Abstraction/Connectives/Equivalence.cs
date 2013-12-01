@@ -3,9 +3,9 @@ namespace Deduction.Abstraction.Connectives
 {
     public class Equivalence : BinaryConnectiveBase
     {
-        public override bool Operation(bool first, bool second)
+        public override bool Operation(bool left, bool right)
         {
-            return !(first && !second) && !(!first && second);
+            return !(left && !right) && !(!left && right);
         }
     }
 }

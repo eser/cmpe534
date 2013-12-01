@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Deduction.Abstraction.Connectives;
 
 namespace Deduction.Abstraction
 {
@@ -40,6 +42,45 @@ namespace Deduction.Abstraction
         public override bool Equals(object obj)
         {
             return false;
+        }
+
+        public bool HasOnlyLiterals()
+        {
+            foreach (IPropositionMember member in this.items)
+            {
+                if (!(member is IPropositionValue || member is UnaryConnectiveBase))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public Type GetCommonBinaryConnectiveType()
+        {
+            Type binaryConnectiveType = null;
+
+            foreach (IPropositionMember member in this.items)
+            {
+                if (!(member is BinaryConnectiveBase))
+                {
+                    continue;
+                }
+
+                if (binaryConnectiveType == null)
+                {
+                    binaryConnectiveType = member.GetType();
+                    continue;
+                }
+
+                if (binaryConnectiveType != member.GetType())
+                {
+                    return null;
+                }
+            }
+
+            return binaryConnectiveType;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
                     PropositionArray arrayMembers = Evaluator.AssignValues(array, values);
 
-                    if (Simplifier.HasOnlyLiterals(arrayMembers))
+                    if (arrayMembers.HasOnlyLiterals())
                     {
                         final.Items.AddRange(arrayMembers.Items);
                     }

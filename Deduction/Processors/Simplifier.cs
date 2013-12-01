@@ -20,45 +20,6 @@ namespace Deduction.Processors
             return simplified;
         }
 
-        public static bool HasOnlyLiterals(PropositionArray input)
-        {
-            foreach (IPropositionMember member in input.Items)
-            {
-                if (!(member is IPropositionValue || member is UnaryConnectiveBase))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public static Type GetCommonBinaryConnectiveType(PropositionArray input)
-        {
-            Type binaryConnectiveType = null;
-
-            foreach (IPropositionMember member in input.Items)
-            {
-                if (!(member is BinaryConnectiveBase))
-                {
-                    continue;
-                }
-
-                if (binaryConnectiveType == null)
-                {
-                    binaryConnectiveType = member.GetType();
-                    continue;
-                }
-
-                if (binaryConnectiveType != member.GetType())
-                {
-                    return null;
-                }
-            }
-
-            return binaryConnectiveType;
-        }
-
         public static PropositionArray RedundantParanthesis(PropositionArray input)
         {
             PropositionArray final = new PropositionArray();
@@ -70,7 +31,7 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
                     PropositionArray arrayMembers = Simplifier.RedundantParanthesis(array);
 
-                    if (Simplifier.HasOnlyLiterals(arrayMembers))
+                    if (arrayMembers.HasOnlyLiterals())
                     {
                         final.Items.AddRange(arrayMembers.Items);
                         continue;
@@ -102,7 +63,7 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
                     PropositionArray newArray = Simplifier.MergeNots(array);
 
-                    if (Simplifier.HasOnlyLiterals(newArray))
+                    if (newArray.HasOnlyLiterals())
                     {
                         final.Items.AddRange(newArray.Items);
                     }
@@ -157,7 +118,7 @@ namespace Deduction.Processors
         public static PropositionArray MergeOperators(PropositionArray input)
         {
             PropositionArray final = new PropositionArray();
-            Type membersCommonBinaryConnectiveType = Simplifier.GetCommonBinaryConnectiveType(input);
+            Type membersCommonBinaryConnectiveType = input.GetCommonBinaryConnectiveType();
 
             foreach (IPropositionMember member in input.Items)
             {
@@ -166,7 +127,7 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
 
                     PropositionArray arrayMembers = Simplifier.MergeOperators(array);
-                    Type arrayMembersCommonBinaryConnectiveType = Simplifier.GetCommonBinaryConnectiveType(arrayMembers);
+                    Type arrayMembersCommonBinaryConnectiveType = arrayMembers.GetCommonBinaryConnectiveType();
                     if (arrayMembersCommonBinaryConnectiveType != null && arrayMembersCommonBinaryConnectiveType == membersCommonBinaryConnectiveType)
                     {
                         final.Items.AddRange(arrayMembers.Items);
@@ -198,7 +159,7 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
                     PropositionArray arrayMembers = Simplifier.RedundantConnectives(array);
 
-                    if (Simplifier.HasOnlyLiterals(arrayMembers))
+                    if (arrayMembers.HasOnlyLiterals())
                     {
                         stack.AddRange(arrayMembers.Items);
                     }

@@ -3,9 +3,9 @@ namespace Deduction.Abstraction.Connectives
 {
     public class Not : UnaryConnectiveBase
     {
-        public override bool Operation(bool first)
+        public override bool Operation(bool value)
         {
-            return !first;
+            return !value;
         }
     }
 }
