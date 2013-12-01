@@ -17,7 +17,7 @@ namespace Deduction.Abstraction.Constants
             }
             set
             {
-                this.negated = true;
+                this.negated = value;
             }
         }
 

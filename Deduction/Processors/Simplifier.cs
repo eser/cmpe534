@@ -31,11 +31,9 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
                     PropositionArray arrayMembers = Simplifier.RedundantParanthesis(array);
 
-                    if (arrayMembers.HasOnlyLiterals())
-                    {
-                        final.Items.AddRange(arrayMembers.Items);
-                        continue;
-                    }
+                    arrayMembers.AddIntoPropositionArray(final);
+
+                    continue;
                 }
 
                 final.Items.Add(member);
@@ -47,68 +45,44 @@ namespace Deduction.Processors
         public static PropositionArray MergeNots(PropositionArray input)
         {
             PropositionArray final = new PropositionArray();
-            Stack<Not> stack = new Stack<Not>();
+            bool negate = false;
 
             foreach (IPropositionMember member in input.Items)
             {
                 if (member is PropositionArray)
                 {
-                    if (stack.Count % 2 > 0)
+                    PropositionArray array = member as PropositionArray;
+
+                    if (negate)
                     {
-                        final.Items.Add(stack.Peek());
+                        array.Negated = !array.Negated;
+                        negate = false;
                     }
 
-                    stack.Clear();
-
-                    PropositionArray array = member as PropositionArray;
                     PropositionArray newArray = Simplifier.MergeNots(array);
 
-                    if (newArray.HasOnlyLiterals())
-                    {
-                        final.Items.AddRange(newArray.Items);
-                    }
-                    else
-                    {
-                        final.Items.Add(newArray);
-                    }
+                    newArray.AddIntoPropositionArray(final);
                 }
                 else if (member is Not)
                 {
-                    Not connective = member as Not;
+                    negate = !negate;
+                }
+                else if (member is IPropositionValue)
+                {
+                    IPropositionValue value = member as IPropositionValue;
 
-                    if (stack.Count > 0)
+                    if (negate)
                     {
-                        Not lastConnective = stack.Peek();
-
-                        if (lastConnective.GetType() == member.GetType())
-                        {
-                            stack.Push(connective);
-                            continue;
-                        }
-                        else
-                        {
-                            if (stack.Count % 2 > 0)
-                            {
-                                final.Items.Add(lastConnective);
-                            }
-
-                            stack.Clear();
-                        }
+                        value.Negated = !value.Negated;
+                        negate = false;
                     }
-                    else
-                    {
-                        stack.Push(connective);
-                    }
+
+                    final.Items.Add(value);
                 }
                 else
                 {
-                    if (stack.Count % 2 > 0)
-                    {
-                        final.Items.Add(stack.Peek());
-                    }
-
-                    stack.Clear();
                     final.Items.Add(member);
+                    negate = false;
                 }
             }
 
@@ -159,14 +133,7 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
                     PropositionArray arrayMembers = Simplifier.RedundantConnectives(array);
 
-                    if (arrayMembers.HasOnlyLiterals())
-                    {
-                        stack.AddRange(arrayMembers.Items);
-                    }
-                    else
-                    {
-                        stack.Add(arrayMembers);
-                    }
+                    arrayMembers.AddIntoPropositionArray(stack);
                 }
                 else if (member is BinaryConnectiveBase)
                 {

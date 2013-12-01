@@ -44,19 +44,6 @@ namespace Deduction.Abstraction
             return false;
         }
 
-        public bool HasOnlyLiterals()
-        {
-            foreach (IPropositionMember member in this.items)
-            {
-                if (!(member is IPropositionValue || member is UnaryConnectiveBase))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         public Type GetCommonBinaryConnectiveType()
         {
             Type binaryConnectiveType = null;
@@ -81,6 +68,41 @@ namespace Deduction.Abstraction
             }
 
             return binaryConnectiveType;
+        }
+
+        public bool HasOnlyLiterals()
+        {
+            foreach (IPropositionMember member in this.items)
+            {
+                if (!(member is IPropositionValue || member is UnaryConnectiveBase))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void AddIntoPropositionArray(PropositionArray target)
+        {
+            if (this.HasOnlyLiterals())
+            {
+                target.Items.AddRange(this.items);
+                return;
+            }
+
+            target.Items.Add(this);
+        }
+        
+        public void AddIntoPropositionArray(List<IPropositionMember> target)
+        {
+            if (this.HasOnlyLiterals())
+            {
+                target.AddRange(this.items);
+                return;
+            }
+
+            target.Add(this);
         }
     }
 }

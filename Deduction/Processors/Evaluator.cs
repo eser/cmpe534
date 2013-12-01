@@ -23,16 +23,7 @@ namespace Deduction.Processors
                     PropositionArray array = member as PropositionArray;
                     PropositionArray arrayMembers = Evaluator.AssignValues(array, values);
 
-                    if (arrayMembers.HasOnlyLiterals())
-                    {
-                        final.Items.AddRange(arrayMembers.Items);
-                    }
-                    else
-                    {
-                        final.Items.Add(arrayMembers);
-                    }
-
-                    continue;
+                    arrayMembers.AddIntoPropositionArray(final);
                 }
                 else if ((member is ConstantBase) && !(member is False || member is True))
                 {
@@ -40,11 +31,11 @@ namespace Deduction.Processors
 
                     if (constant.Value)
                     {
-                        final.Items.Add(new True());
+                        final.Items.Add(new True() { Negated = constant.Negated });
                     }
                     else
                     {
-                        final.Items.Add(new False());
+                        final.Items.Add(new False() { Negated = constant.Negated });
                     }
                 }
                 else if (member is PropositionSymbol)
@@ -55,11 +46,11 @@ namespace Deduction.Processors
                     {
                         if (values[symbol.Letter])
                         {
-                            final.Items.Add(new True());
+                            final.Items.Add(new True() { Negated = symbol.Negated });
                         }
                         else
                         {
-                            final.Items.Add(new False());
+                            final.Items.Add(new False() { Negated = symbol.Negated });
                         }
                     }
                     else
