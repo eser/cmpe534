@@ -6,22 +6,32 @@ This repository contains some practical implementations for CMPE534 Automated De
 
 Project #1: Deduction
 ---------------------
-**Todos:**
+**To-dos:**
 
 * 'not' operator might have been a composite data structure instead of a lexical symbol.
   if it could store a propositional symbol, simplifications will work more effective.
 
-* 'Properties' class with 'Distribute' method needed, to resolve inside paranthesis.
+* 'Properties' class with 'Distribute' method needed, to resolve inside parenthesis.
 
 * Connectives' simplify implementation needs to cover lot more than that.
 
-* Equality comparision for PropositionArrays
+* Equality comparison for PropositionArrays
+
+* Evaluator.Evaluate
+
+
+**Roadmap:**
+
+* Gentzen
+
+* Resolution
 
 
 **Output:**
 ``` bash
-input      = (((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f
-output     = (A & B & C) | (!C & D | D) | f
+proposition = (((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f
+simplified  = (A & B & C) | (!C & D | D) | f
+evaluated   = (t & f & t) | (!t & f | f) | f
 ```
 
 

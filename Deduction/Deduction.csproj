@@ -59,6 +59,7 @@
     <Compile Include="Parsing\SymbolRegistry.cs" />
     <Compile Include="Parsing\Dumper.cs" />
     <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Processors\Evaluator.cs" />
     <Compile Include="Processors\Simplifier.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

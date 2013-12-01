@@ -46,7 +46,8 @@ namespace Deduction.Parsing
             {
                 { '&', typeof(And) },
                 { '|', typeof(Or) },
-                { '!', typeof(Not) }
+                { '!', typeof(Not) },
+                { '>', typeof(Implication) }
             };
 
             this.constants = new Dictionary<char, Type>()

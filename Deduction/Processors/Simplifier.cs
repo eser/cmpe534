@@ -7,7 +7,7 @@ using Deduction.Abstraction.Constants;
 
 namespace Deduction.Processors
 {
-    public class Simplifier
+    public static class Simplifier
     {
         public static List<IPropositionMember> Simplify(IEnumerable<IPropositionMember> members)
         {
@@ -270,7 +270,7 @@ namespace Deduction.Processors
             return final;
         }
 
-        protected static List<IPropositionMember> RedundantConnectivesStackSimplification(IEnumerable<IPropositionMember> members)
+        private static List<IPropositionMember> RedundantConnectivesStackSimplification(IEnumerable<IPropositionMember> members)
         {
             List<IPropositionMember> final = new List<IPropositionMember>(members);
 
