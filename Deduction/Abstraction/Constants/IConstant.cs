@@ -1,7 +1,7 @@
 ﻿
 namespace Deduction.Abstraction.Constants
 {
-    public interface IConstant : IPropositionMember
+    public interface IConstant : IPropositionValue
     {
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Deduction.Abstraction;
 using Deduction.Abstraction.Constants;
-using Deduction.Parsing;
 
 namespace Deduction.Processors
 {
@@ -13,25 +12,24 @@ namespace Deduction.Processors
             return false;
         }
 
-        public static List<IPropositionMember> AssignValues(IEnumerable<IPropositionMember> members, Dictionary<char, bool> values)
+        public static PropositionArray AssignValues(PropositionArray input, Dictionary<char, bool> values)
         {
-            List<IPropositionMember> final = new List<IPropositionMember>();
+            PropositionArray final = new PropositionArray();
 
-            foreach (IPropositionMember member in members)
+            foreach (IPropositionMember member in input.Items)
             {
                 if (member is PropositionArray)
                 {
                     PropositionArray array = member as PropositionArray;
-
-                    IList<IPropositionMember> arrayMembers = Evaluator.AssignValues(array.Items, values);
+                    PropositionArray arrayMembers = Evaluator.AssignValues(array, values);
 
                     if (Simplifier.HasOnlyLiterals(arrayMembers))
                     {
-                        final.AddRange(arrayMembers);
+                        final.Items.AddRange(arrayMembers.Items);
                     }
                     else
                     {
-                        final.Add(new PropositionArray(arrayMembers));
+                        final.Items.Add(arrayMembers);
                     }
 
                     continue;
@@ -42,29 +40,36 @@ namespace Deduction.Processors
 
                     if (constant.Value)
                     {
-                        final.Add(new True());
+                        final.Items.Add(new True());
                     }
                     else
                     {
-                        final.Add(new False());
+                        final.Items.Add(new False());
                     }
                 }
                 else if (member is PropositionSymbol)
                 {
                     PropositionSymbol symbol = member as PropositionSymbol;
 
-                    if (values[symbol.Letter])
+                    if (values.ContainsKey(symbol.Letter))
                     {
-                        final.Add(new True());
+                        if (values[symbol.Letter])
+                        {
+                            final.Items.Add(new True());
+                        }
+                        else
+                        {
+                            final.Items.Add(new False());
+                        }
                     }
                     else
                     {
-                        final.Add(new False());
+                        final.Items.Add(member);
                     }
                 }
                 else
                 {
-                    final.Add(member);
+                    final.Items.Add(member);
                 }
             }
 

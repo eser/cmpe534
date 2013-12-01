@@ -3,29 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using Deduction.Abstraction;
 using Deduction.Abstraction.Connectives;
-using Deduction.Abstraction.Constants;
 
 namespace Deduction.Processors
 {
     public static class Simplifier
     {
-        public static List<IPropositionMember> Simplify(IEnumerable<IPropositionMember> members)
+        public static PropositionArray Simplify(PropositionArray input)
         {
-            List<IPropositionMember> simplified;
+            PropositionArray simplified;
 
-            simplified = Simplifier.RedundantParanthesis(members);
-            simplified = Simplifier.RedundantNots(simplified);
+            simplified = Simplifier.RedundantParanthesis(input);
+            simplified = Simplifier.MergeNots(simplified);
             simplified = Simplifier.MergeOperators(simplified);
             simplified = Simplifier.RedundantConnectives(simplified);
 
             return simplified;
         }
 
-        public static bool HasOnlyLiterals(IEnumerable<IPropositionMember> members)
+        public static bool HasOnlyLiterals(PropositionArray input)
         {
-            foreach (IPropositionMember arrayMember in members)
+            foreach (IPropositionMember member in input.Items)
             {
-                if (!(arrayMember is PropositionSymbol || arrayMember is UnaryConnectiveBase || arrayMember is PropositionArray || arrayMember is ConstantBase))
+                if (!(member is IPropositionValue || member is UnaryConnectiveBase))
                 {
                     return false;
                 }
@@ -34,24 +33,24 @@ namespace Deduction.Processors
             return true;
         }
 
-        public static Type GetCommonBinaryConnectiveType(IEnumerable<IPropositionMember> members)
+        public static Type GetCommonBinaryConnectiveType(PropositionArray input)
         {
             Type binaryConnectiveType = null;
 
-            foreach (IPropositionMember arrayMember in members)
+            foreach (IPropositionMember member in input.Items)
             {
-                if (!(arrayMember is BinaryConnectiveBase))
+                if (!(member is BinaryConnectiveBase))
                 {
                     continue;
                 }
 
                 if (binaryConnectiveType == null)
                 {
-                    binaryConnectiveType = arrayMember.GetType();
+                    binaryConnectiveType = member.GetType();
                     continue;
                 }
 
-                if (binaryConnectiveType != arrayMember.GetType())
+                if (binaryConnectiveType != member.GetType())
                 {
                     return null;
                 }
@@ -60,57 +59,56 @@ namespace Deduction.Processors
             return binaryConnectiveType;
         }
 
-        public static List<IPropositionMember> RedundantParanthesis(IEnumerable<IPropositionMember> members)
+        public static PropositionArray RedundantParanthesis(PropositionArray input)
         {
-            List<IPropositionMember> final = new List<IPropositionMember>();
+            PropositionArray final = new PropositionArray();
 
-            foreach (IPropositionMember member in members)
+            foreach (IPropositionMember member in input.Items)
             {
                 if (member is PropositionArray)
                 {
                     PropositionArray array = member as PropositionArray;
-
-                    IList<IPropositionMember> arrayMembers = Simplifier.RedundantParanthesis(array.Items);
+                    PropositionArray arrayMembers = Simplifier.RedundantParanthesis(array);
 
                     if (Simplifier.HasOnlyLiterals(arrayMembers))
                     {
-                        final.AddRange(arrayMembers);
+                        final.Items.AddRange(arrayMembers.Items);
                         continue;
                     }
                 }
 
-                final.Add(member);
+                final.Items.Add(member);
             }
 
             return final;
         }
 
-        public static List<IPropositionMember> RedundantNots(IEnumerable<IPropositionMember> members)
+        public static PropositionArray MergeNots(PropositionArray input)
         {
-            List<IPropositionMember> final = new List<IPropositionMember>();
+            PropositionArray final = new PropositionArray();
             Stack<Not> stack = new Stack<Not>();
 
-            foreach (IPropositionMember member in members)
+            foreach (IPropositionMember member in input.Items)
             {
                 if (member is PropositionArray)
                 {
                     if (stack.Count % 2 > 0)
                     {
-                        final.Add(stack.Peek());
+                        final.Items.Add(stack.Peek());
                     }
 
                     stack.Clear();
 
                     PropositionArray array = member as PropositionArray;
-                    List<IPropositionMember> newArray = Simplifier.RedundantNots(array.Items);
+                    PropositionArray newArray = Simplifier.MergeNots(array);
 
                     if (Simplifier.HasOnlyLiterals(newArray))
                     {
-                        final.AddRange(newArray);
+                        final.Items.AddRange(newArray.Items);
                     }
                     else
                     {
-                        final.Add(new PropositionArray(newArray));
+                        final.Items.Add(newArray);
                     }
                 }
                 else if (member is Not)
@@ -130,7 +128,7 @@ namespace Deduction.Processors
                         {
                             if (stack.Count % 2 > 0)
                             {
-                                final.Add(lastConnective);
+                                final.Items.Add(lastConnective);
                             }
 
                             stack.Clear();
@@ -145,69 +143,68 @@ namespace Deduction.Processors
                 {
                     if (stack.Count % 2 > 0)
                     {
-                        final.Add(stack.Peek());
+                        final.Items.Add(stack.Peek());
                     }
 
                     stack.Clear();
-                    final.Add(member);
+                    final.Items.Add(member);
                 }
             }
 
             return final;
         }
 
-        public static List<IPropositionMember> MergeOperators(IEnumerable<IPropositionMember> members)
+        public static PropositionArray MergeOperators(PropositionArray input)
         {
-            List<IPropositionMember> final = new List<IPropositionMember>();
-            Type membersCommonBinaryConnectiveType = Simplifier.GetCommonBinaryConnectiveType(members);
+            PropositionArray final = new PropositionArray();
+            Type membersCommonBinaryConnectiveType = Simplifier.GetCommonBinaryConnectiveType(input);
 
-            foreach (IPropositionMember member in members)
+            foreach (IPropositionMember member in input.Items)
             {
                 if (member is PropositionArray)
                 {
                     PropositionArray array = member as PropositionArray;
 
-                    IList<IPropositionMember> arrayMembers = Simplifier.MergeOperators(array.Items);
+                    PropositionArray arrayMembers = Simplifier.MergeOperators(array);
                     Type arrayMembersCommonBinaryConnectiveType = Simplifier.GetCommonBinaryConnectiveType(arrayMembers);
                     if (arrayMembersCommonBinaryConnectiveType != null && arrayMembersCommonBinaryConnectiveType == membersCommonBinaryConnectiveType)
                     {
-                        final.AddRange(arrayMembers);
+                        final.Items.AddRange(arrayMembers.Items);
                     }
                     else
                     {
-                        final.Add(new PropositionArray(arrayMembers));
+                        final.Items.Add(arrayMembers);
                     }
 
                     continue;
                 }
 
-                final.Add(member);
+                final.Items.Add(member);
             }
 
             return final;
         }
 
-        public static List<IPropositionMember> RedundantConnectives(IEnumerable<IPropositionMember> members)
+        public static PropositionArray RedundantConnectives(PropositionArray input)
         {
-            List<IPropositionMember> final = new List<IPropositionMember>();
+            PropositionArray final = new PropositionArray();
             List<IPropositionMember> stack = new List<IPropositionMember>();
             Type lastConnectiveType = null;
 
-            foreach (IPropositionMember member in members)
+            foreach (IPropositionMember member in input.Items)
             {
                 if (member is PropositionArray)
                 {
                     PropositionArray array = member as PropositionArray;
-
-                    IList<IPropositionMember> arrayMembers = Simplifier.RedundantConnectives(array.Items);
+                    PropositionArray arrayMembers = Simplifier.RedundantConnectives(array);
 
                     if (Simplifier.HasOnlyLiterals(arrayMembers))
                     {
-                        stack.AddRange(arrayMembers);
+                        stack.AddRange(arrayMembers.Items);
                     }
                     else
                     {
-                        stack.Add(new PropositionArray(arrayMembers));
+                        stack.Add(arrayMembers);
                     }
                 }
                 else if (member is BinaryConnectiveBase)
@@ -228,12 +225,12 @@ namespace Deduction.Processors
                             IPropositionMember lastItem = null;
                             foreach (IPropositionMember stackMember in stack)
                             {
-                                if ((lastItem == null || !(lastItem is UnaryConnectiveBase)) && final.Count > 0)
+                                if ((lastItem == null || !(lastItem is UnaryConnectiveBase)) && final.Items.Count > 0)
                                 {
-                                    final.Add(Activator.CreateInstance(lastConnectiveType) as IPropositionMember);
+                                    final.Items.Add(Activator.CreateInstance(lastConnectiveType) as IPropositionMember);
                                 }
 
-                                final.Add(stackMember);
+                                final.Items.Add(stackMember);
                                 lastItem = stackMember;
                             }
 
@@ -257,12 +254,12 @@ namespace Deduction.Processors
                 IPropositionMember lastItem = null;
                 foreach (IPropositionMember stackMember in stack)
                 {
-                    if ((lastItem == null || !(lastItem is UnaryConnectiveBase)) && final.Count > 0)
+                    if ((lastItem == null || !(lastItem is UnaryConnectiveBase)) && final.Items.Count > 0)
                     {
-                        final.Add(Activator.CreateInstance(lastConnectiveType) as IPropositionMember);
+                        final.Items.Add(Activator.CreateInstance(lastConnectiveType) as IPropositionMember);
                     }
 
-                    final.Add(stackMember);
+                    final.Items.Add(stackMember);
                     lastItem = stackMember;
                 }
             }

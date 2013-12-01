@@ -3,7 +3,23 @@ namespace Deduction.Abstraction.Constants
 {
     public abstract class ConstantBase : IConstant
     {
-        public abstract bool Value { get; }
+        protected bool negated = false;
+
+        public abstract bool Value {
+            get;
+        }
+
+        public virtual bool Negated
+        {
+            get
+            {
+                return this.negated;
+            }
+            set
+            {
+                this.negated = true;
+            }
+        }
 
         public override bool Equals(object obj)
         {
@@ -13,7 +29,7 @@ namespace Deduction.Abstraction.Constants
                 return false;
             }
 
-            return (this.Value == constant.Value);
+            return (this.Value == constant.Value) && (this.Negated == constant.Negated);
         }
     }
 }

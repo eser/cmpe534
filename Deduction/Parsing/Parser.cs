@@ -17,9 +17,9 @@ namespace Deduction.Parsing
             this.currentPosition = 0;
         }
 
-        public IEnumerable<IPropositionMember> Parse()
+        public PropositionArray Parse()
         {
-            List<IPropositionMember> members = new List<IPropositionMember>();
+            PropositionArray final = new PropositionArray();
 
             while (true) {
                 char? curr = this.GetNext();
@@ -31,7 +31,7 @@ namespace Deduction.Parsing
                 if (char.IsUpper(curr.Value))
                 {
                     PropositionSymbol symbol = new PropositionSymbol(curr.Value);
-                    members.Add(symbol);
+                    final.Items.Add(symbol);
                 }
                 else if (curr.Value == '(')
                 {
@@ -39,7 +39,7 @@ namespace Deduction.Parsing
 
                     Parser insideParser = new Parser(insideParanthesis);
                     PropositionArray array = new PropositionArray(insideParser.Parse());
-                    members.Add(array);
+                    final.Items.Add(array);
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace Deduction.Parsing
                         if (curr.Value == pair.Key)
                         {
                             IConnective connectiveInstance = (IConnective)Activator.CreateInstance(pair.Value);
-                            members.Add(connectiveInstance);
+                            final.Items.Add(connectiveInstance);
 
                             found = true;
                             break;
@@ -64,7 +64,7 @@ namespace Deduction.Parsing
                             if (curr.Value == pair.Key)
                             {
                                 IConstant constantInstance = (IConstant)Activator.CreateInstance(pair.Value);
-                                members.Add(constantInstance);
+                                final.Items.Add(constantInstance);
 
                                 found = true;
                                 break;
@@ -74,7 +74,7 @@ namespace Deduction.Parsing
                 }
             }
 
-            return members;
+            return final;
         }
 
         protected char? GetNext()

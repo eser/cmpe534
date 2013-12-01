@@ -49,6 +49,7 @@
     <Compile Include="Abstraction\Constants\False.cs" />
     <Compile Include="Abstraction\Constants\IConstant.cs" />
     <Compile Include="Abstraction\Constants\True.cs" />
+    <Compile Include="Abstraction\IPropositionValue.cs" />
     <Compile Include="Abstraction\PropositionArray.cs" />
     <Compile Include="Abstraction\Connectives\Equivalence.cs" />
     <Compile Include="Abstraction\Connectives\Implication.cs" />

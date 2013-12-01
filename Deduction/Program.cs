@@ -9,13 +9,13 @@ namespace Deduction
     {
         public static void Main(string[] args)
         {
-            string prop = "(((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f";
+            string prop = "(((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | !f";
             Dictionary<char, bool> values = new Dictionary<char, bool>()
             {
                 { 'A', true },
                 { 'B', false },
-                { 'C', true },
-                { 'D', false }
+                { 'C', true } // ,
+                // { 'D', false }
             };
 
             Parser parser = new Parser(prop);

@@ -1,13 +1,33 @@
 ﻿
 namespace Deduction.Abstraction
 {
-    public class PropositionSymbol : IPropositionMember
+    public class PropositionSymbol : IPropositionValue
     {
-        public char Letter { get; set; }
+        protected readonly char letter;
+        protected bool negated;
 
-        public PropositionSymbol(char letter)
+        public char Letter {
+            get
+            {
+                return this.letter;
+            }
+        }
+
+        public bool Negated {
+            get
+            {
+                return this.negated;
+            }
+            set
+            {
+                this.negated = true;
+            }
+        }
+
+        public PropositionSymbol(char letter, bool negated = false)
         {
-            this.Letter = letter;
+            this.letter = letter;
+            this.negated = negated;
         }
 
         public override bool Equals(object obj)
@@ -18,7 +38,7 @@ namespace Deduction.Abstraction
                 return false;
             }
 
-            return (this.Letter == symbol.Letter);
+            return (this.Letter == symbol.Letter) && (this.Negated == symbol.Negated);
         }
     }
 }

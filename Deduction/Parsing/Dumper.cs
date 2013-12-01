@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Deduction.Abstraction;
+﻿using Deduction.Abstraction;
 using Deduction.Abstraction.Connectives;
 using Deduction.Abstraction.Constants;
 
@@ -7,11 +6,11 @@ namespace Deduction.Parsing
 {
     public static class Dumper
     {
-        public static string GetString(IEnumerable<IPropositionMember> members)
+        public static string GetString(PropositionArray input)
         {
             string final = string.Empty;
 
-            foreach (IPropositionMember member in members)
+            foreach (IPropositionMember member in input.Items)
             {
                 if (member is PropositionSymbol)
                 {
@@ -43,7 +42,7 @@ namespace Deduction.Parsing
                 }
                 else if (member is PropositionArray)
                 {
-                    final += "(" + Dumper.GetString((member as PropositionArray).Items) + ")";
+                    final += "(" + Dumper.GetString(member as PropositionArray) + ")";
                 }
             }
 
