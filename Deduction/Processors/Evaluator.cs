@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Deduction.Abstraction;
 using Deduction.Abstraction.Connectives;
 using Deduction.Abstraction.Constants;
@@ -16,6 +15,7 @@ namespace Deduction.Processors
             simplified = Evaluator.AssignValues(simplified, values);
             simplified = Evaluator.EvaluateAnds(simplified);
             simplified = Evaluator.EvaluateOrs(simplified);
+            simplified = Simplifier.Simplify(simplified);
 
             return simplified;
         }
