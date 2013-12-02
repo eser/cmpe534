@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Deduction.Abstraction;
 using Deduction.Abstraction.Connectives;
@@ -22,7 +21,10 @@ namespace Deduction.Processors
 
         public static PropositionArray RedundantParanthesis(PropositionArray input)
         {
-            PropositionArray final = new PropositionArray();
+            PropositionArray final = new PropositionArray()
+            {
+                Negated = input.Negated
+            };
 
             foreach (IPropositionMember member in input.Items)
             {
@@ -44,7 +46,10 @@ namespace Deduction.Processors
 
         public static PropositionArray MergeNots(PropositionArray input)
         {
-            PropositionArray final = new PropositionArray();
+            PropositionArray final = new PropositionArray()
+            {
+                Negated = input.Negated
+            };
             bool negate = false;
 
             foreach (IPropositionMember member in input.Items)
@@ -91,7 +96,10 @@ namespace Deduction.Processors
 
         public static PropositionArray MergeOperators(PropositionArray input)
         {
-            PropositionArray final = new PropositionArray();
+            PropositionArray final = new PropositionArray()
+            {
+                Negated = input.Negated
+            };
             Type membersCommonBinaryConnectiveType = input.GetCommonBinaryConnectiveType();
 
             foreach (IPropositionMember member in input.Items)
@@ -122,7 +130,10 @@ namespace Deduction.Processors
 
         public static PropositionArray RedundantConnectives(PropositionArray input)
         {
-            PropositionArray final = new PropositionArray();
+            PropositionArray final = new PropositionArray()
+            {
+                Negated = input.Negated
+            };
             List<IPropositionMember> stack = new List<IPropositionMember>();
             Type lastConnectiveType = null;
 

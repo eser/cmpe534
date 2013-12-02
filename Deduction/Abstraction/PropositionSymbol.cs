@@ -13,14 +13,15 @@ namespace Deduction.Abstraction
             }
         }
 
-        public bool Negated {
+        public bool Negated
+        {
             get
             {
                 return this.negated;
             }
             set
             {
-                this.negated = true;
+                this.negated = value;
             }
         }
 

@@ -24,7 +24,7 @@ namespace Deduction.Abstraction
             }
             set
             {
-                this.negated = true;
+                this.negated = value;
             }
         }
 
@@ -94,15 +94,34 @@ namespace Deduction.Abstraction
             target.Items.Add(this);
         }
         
-        public void AddIntoPropositionArray(List<IPropositionMember> target)
+        public void AddIntoPropositionArray(ICollection<IPropositionMember> target)
         {
             if (this.HasOnlyLiterals())
             {
-                target.AddRange(this.items);
+                foreach (IPropositionMember member in this.items)
+                {
+                    target.Add(member);
+                }
+
                 return;
             }
 
             target.Add(this);
+        }
+
+        public void AddIntoPropositionArray(Stack<IPropositionMember> target)
+        {
+            if (this.HasOnlyLiterals())
+            {
+                foreach (IPropositionMember member in this.items)
+                {
+                    target.Push(member);
+                }
+
+                return;
+            }
+
+            target.Push(this);
         }
     }
 }

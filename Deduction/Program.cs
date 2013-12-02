@@ -9,7 +9,7 @@ namespace Deduction
     {
         public static void Main(string[] args)
         {
-            string prop = "(((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | !f";
+            string prop = "(((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f";
             Dictionary<char, bool> values = new Dictionary<char, bool>()
             {
                 { 'A', true },
@@ -23,11 +23,15 @@ namespace Deduction
             var simplified = Simplifier.Simplify(members);
             var dumped = Dumper.GetString(simplified);
 
-            var evaluated = Evaluator.AssignValues(simplified, values);
+            var assigned = Evaluator.AssignValues(simplified, values);
+            var assignedDump = Dumper.GetString(assigned);
+
+            var evaluated = Evaluator.Evaluate(simplified, values);
             var evaluatedDump = Dumper.GetString(evaluated);
 
             Console.WriteLine("proposition = {0}", prop);
             Console.WriteLine("simplified  = {0}", dumped);
+            Console.WriteLine("assigned    = {0}", assignedDump);
             Console.WriteLine("evaluated   = {0}", evaluatedDump);
 
             Console.Read();
