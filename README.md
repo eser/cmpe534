@@ -8,16 +8,13 @@ Project #1: Deduction
 ---------------------
 **To-dos:**
 
-* 'not' operator might have been a composite data structure instead of a lexical symbol.
-  if it could store a propositional symbol, simplifications will work more effective.
-
 * 'Properties' class with 'Distribute' method needed, to resolve inside parenthesis.
-
-* Connectives' simplify implementation needs to cover lot more than that.
 
 * Equality comparison for PropositionArrays
 
-* Evaluator.Evaluate
+* Evaluation needs to cover all connective operations.
+
+* Merge all connective operations with precedence, and do it with BinaryConnectiveBase.Operation()
 
 
 **Roadmap:**
@@ -29,9 +26,10 @@ Project #1: Deduction
 
 **Output:**
 ``` bash
-proposition = (((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f
-simplified  = (A & B & C) | (!C & D | D) | f
-evaluated   = (t & f & t) | (!t & f | f) | f
+proposition = (((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | t & D
+simplified  = (A & B & C) | (!C & D | D) | f | t & D
+assigned    = (t & f & t) | (!t & D | D) | f | t & D
+evaluated   = D
 ```
 
 
