@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Abstraction">
+      <UniqueIdentifier>{c24ce386-de4f-43c6-a858-3ee71d1c1f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Abstraction">
+      <UniqueIdentifier>{3d5bb402-1c0c-4c8b-a7f4-40b77fd3033a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Abstraction\Connectives">
+      <UniqueIdentifier>{1a335696-c55a-4055-9c2d-bc3cbc995165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Abstraction\Connectives">
+      <UniqueIdentifier>{de0a6500-05be-447d-ab60-405f821f74a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Abstraction\Constants">
+      <UniqueIdentifier>{03b1b6bc-3423-4e5d-8474-1353a068be6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Abstraction\Constants">
+      <UniqueIdentifier>{83ea0c88-901f-451c-a759-79a84f88e664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Parsing">
+      <UniqueIdentifier>{823e66aa-0c53-444f-92d3-a5fe9586cef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Parsing">
+      <UniqueIdentifier>{9f199b4f-f58f-487d-aeed-846444ae1299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Processors">
+      <UniqueIdentifier>{ff81dc9c-306d-41e8-a479-363cdac80050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Processors">
+      <UniqueIdentifier>{728179e3-8d1f-450b-887b-8d5264b5a664}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parsing\Parser.h">
+      <Filter>Header Files\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="Parsing\Dumper.h">
+      <Filter>Header Files\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="Parsing\SymbolRegistry.h">
+      <Filter>Header Files\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\IPropositionMember.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\IPropositionValue.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\PropositionArray.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\PropositionMemberTypes.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\PropositionVariable.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\PropositionConstant.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\Constants\True.h">
+      <Filter>Header Files\Abstraction\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\Constants\False.h">
+      <Filter>Header Files\Abstraction\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\BinaryConnective.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\UnaryConnective.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\Connectives\And.h">
+      <Filter>Header Files\Abstraction\Connectives</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\Connectives\Implication.h">
+      <Filter>Header Files\Abstraction\Connectives</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\Connectives\Or.h">
+      <Filter>Header Files\Abstraction\Connectives</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\Connectives\Equivalence.h">
+      <Filter>Header Files\Abstraction\Connectives</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\Connectives\Not.h">
+      <Filter>Header Files\Abstraction\Connectives</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parsing\Parser.cpp">
+      <Filter>Source Files\Parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="Parsing\Dumper.cpp">
+      <Filter>Source Files\Parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="Parsing\SymbolRegistry.cpp">
+      <Filter>Source Files\Parsing</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
