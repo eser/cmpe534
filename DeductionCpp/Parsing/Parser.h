@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "../Abstraction/PropositionArray.h"
 
 namespace DeductionCpp { namespace Parsing {
 
@@ -8,10 +9,18 @@ class Parser
 {
 protected:
     std::string line;
-    int currentPosition;
+    unsigned int currentPosition;
 
-    // char* GetNext();
-    // std::string GetInsideParanthesis();
+    inline char GetNext()
+    {
+        if (this->currentPosition >= this->line.length()) {
+            return NULL; // '\0';
+        }
+
+        return this->line[this->currentPosition++];
+    }
+
+    std::string GetInsideParanthesis();
 
 public:
     Parser(std::string line)
@@ -24,7 +33,7 @@ public:
     //{
     //}
 
-    // PropositionArray Parse();
+    DeductionCpp::Abstraction::PropositionArray Parse();
 };
 
 } }

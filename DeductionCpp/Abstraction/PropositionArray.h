@@ -11,9 +11,13 @@ protected:
     bool negated;
 
 public:
-    std::vector<IPropositionMember> Items;
+    std::vector<IPropositionMember*> Items;
 
-    PropositionArray(std::vector<IPropositionMember> items) : IPropositionValue(), Items(items), negated(negated)
+    PropositionArray(std::vector<IPropositionMember*> items) : IPropositionValue(), Items(items), negated(negated)
+    {
+    }
+
+    PropositionArray() : IPropositionValue(), Items(), negated(negated)
     {
     }
 

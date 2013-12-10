@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     };
 
     DeductionCpp::Parsing::Parser parser(prop);
-    // auto members = parser.Parse();
+    auto members = parser.Parse();
 
     cout << "proposition: " << prop << endl;    
 
