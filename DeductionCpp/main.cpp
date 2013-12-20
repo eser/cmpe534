@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include "Parsing/Parser.h"
+#include "Parsing/SymbolRegistry.h"
 #include "Abstraction/PropositionVariable.h"
 
 using namespace std;
@@ -21,7 +22,10 @@ int main(int argc, char* argv[])
     DeductionCpp::Parsing::Parser parser(prop);
     auto members = parser.Parse();
 
-    cout << "proposition: " << prop << endl;    
+    cout << "proposition: " << prop << endl;
+
+    DeductionCpp::Parsing::SymbolRegistry s = DeductionCpp::Parsing::SymbolRegistry::Instance();
+    // cout << s.a << endl;
 
     cin.get();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IPropositionMember.h"
+#include "PropositionMemberTypes.h"
 
 namespace DeductionCpp { namespace Abstraction {
 
