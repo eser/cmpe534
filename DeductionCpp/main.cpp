@@ -2,11 +2,10 @@
 #include <string>
 #include <map>
 #include "Parsing/Parser.h"
-#include "Parsing/SymbolRegistry.h"
-#include "Abstraction/PropositionVariable.h"
+#include "Parsing/Dumper.h"
+#include "Abstraction/Domain.h"
 
 using namespace std;
-using namespace DeductionCpp::Abstraction;
 
 int main(int argc, char* argv[])
 {
@@ -22,9 +21,12 @@ int main(int argc, char* argv[])
     DeductionCpp::Parsing::Parser parser(prop);
     auto members = parser.Parse();
 
-    cout << "proposition: " << prop << endl;
+    auto dumped = members.ToString();
 
-    DeductionCpp::Parsing::SymbolRegistry s = DeductionCpp::Parsing::SymbolRegistry::Instance();
+    cout << "proposition: " << prop << endl;
+    cout << "dumped     : " << dumped << endl;
+
+    DeductionCpp::Abstraction::Domain s = DeductionCpp::Abstraction::Domain::Instance();
     // cout << s.a << endl;
 
     cin.get();

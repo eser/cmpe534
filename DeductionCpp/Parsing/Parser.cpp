@@ -1,6 +1,8 @@
 #include <cctype>
 #include "Parser.h"
-#include "../Abstraction/PropositionVariable.h"
+#include "../Abstraction/Domain.h"
+#include "../Abstraction/DomainMemberTypes.h"
+#include "../Abstraction/PropositionSymbol.h"
 
 using namespace std;
 using namespace DeductionCpp::Abstraction;
@@ -55,27 +57,45 @@ PropositionArray Parser::Parse()
 
         if (isupper(curr))
         {
-            PropositionVariable* symbol = new PropositionVariable(curr);
+            PropositionSymbol* symbol = new PropositionSymbol(curr, false);
             final.Items.push_back(symbol);
-        }
-        else if (curr == '(')
-        {
-            string insideParanthesis = this->GetInsideParanthesis();
-
-            Parser insideParser(insideParanthesis);
-            PropositionArray* array = new PropositionArray(insideParser.Parse());
-            final.Items.push_back(array);
         }
         else
         {
-            bool found = false;
+            DomainMember* member = Domain::Instance().GetMemberBySymbolChar(curr);
 
-            // connectives
-
-            if (!found)
+            if (member != NULL)
             {
-                // constants
+                switch (member->Type)
+                {
+                    case DomainMemberTypes::Array:
+                        {
+                            string insideParanthesis = this->GetInsideParanthesis();
+
+                            Parser insideParser(insideParanthesis);
+                            PropositionArray* array = new PropositionArray(insideParser.Parse());
+                            final.Items.push_back(array);
+                        }
+                        break;
+
+                    default:
+                        IPropositionMember* propositionMember = member->CreateInstance(*member);
+                        final.Items.push_back(propositionMember);
+                        break;
+
+                    //case DomainMemberTypes::Constant:
+                    //    PropositionSymbol* symbol = new PropositionSymbol(curr, true);
+                    //    final.Items.push_back(symbol);
+                    //    break;
+
+                    //case DomainMemberTypes::UnaryConnective:
+                    //    break;
+
+                    //case DomainMemberTypes::BinaryConnective:
+                    //    break;
+                }
             }
+            
         }
     }
 

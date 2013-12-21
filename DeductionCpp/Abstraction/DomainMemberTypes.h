@@ -2,7 +2,7 @@
 
 namespace DeductionCpp { namespace Abstraction {
 
-enum class PropositionMemberTypes
+enum class DomainMemberTypes
 {
     Variable,
     Constant,

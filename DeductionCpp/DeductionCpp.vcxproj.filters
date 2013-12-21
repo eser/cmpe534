@@ -25,12 +25,6 @@
     <Filter Include="Source Files\Abstraction\Connectives">
       <UniqueIdentifier>{de0a6500-05be-447d-ab60-405f821f74a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Abstraction\Constants">
-      <UniqueIdentifier>{03b1b6bc-3423-4e5d-8474-1353a068be6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Abstraction\Constants">
-      <UniqueIdentifier>{83ea0c88-901f-451c-a759-79a84f88e664}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Parsing">
       <UniqueIdentifier>{823e66aa-0c53-444f-92d3-a5fe9586cef2}</UniqueIdentifier>
     </Filter>
@@ -54,32 +48,11 @@
     <ClInclude Include="Parsing\Dumper.h">
       <Filter>Header Files\Parsing</Filter>
     </ClInclude>
-    <ClInclude Include="Parsing\SymbolRegistry.h">
-      <Filter>Header Files\Parsing</Filter>
-    </ClInclude>
     <ClInclude Include="Abstraction\IPropositionMember.h">
-      <Filter>Header Files\Abstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Abstraction\IPropositionValue.h">
       <Filter>Header Files\Abstraction</Filter>
     </ClInclude>
     <ClInclude Include="Abstraction\PropositionArray.h">
       <Filter>Header Files\Abstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Abstraction\PropositionMemberTypes.h">
-      <Filter>Header Files\Abstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Abstraction\PropositionVariable.h">
-      <Filter>Header Files\Abstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Abstraction\PropositionConstant.h">
-      <Filter>Header Files\Abstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Abstraction\Constants\True.h">
-      <Filter>Header Files\Abstraction\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="Abstraction\Constants\False.h">
-      <Filter>Header Files\Abstraction\Constants</Filter>
     </ClInclude>
     <ClInclude Include="Abstraction\BinaryConnective.h">
       <Filter>Header Files\Abstraction</Filter>
@@ -102,6 +75,21 @@
     <ClInclude Include="Abstraction\Connectives\Not.h">
       <Filter>Header Files\Abstraction\Connectives</Filter>
     </ClInclude>
+    <ClInclude Include="Abstraction\Domain.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\DomainMember.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\PropositionSymbol.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\IPropositionMemberValuable.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstraction\DomainMemberTypes.h">
+      <Filter>Header Files\Abstraction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,8 +101,8 @@
     <ClCompile Include="Parsing\Dumper.cpp">
       <Filter>Source Files\Parsing</Filter>
     </ClCompile>
-    <ClCompile Include="Parsing\SymbolRegistry.cpp">
-      <Filter>Source Files\Parsing</Filter>
+    <ClCompile Include="Abstraction\Domain.cpp">
+      <Filter>Source Files\Abstraction</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

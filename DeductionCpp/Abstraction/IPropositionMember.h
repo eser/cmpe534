@@ -1,6 +1,7 @@
 #pragma once
 
-#include "PropositionMemberTypes.h"
+#include <string>
+#include "DomainMember.h"
 
 namespace DeductionCpp { namespace Abstraction {
 
@@ -17,7 +18,8 @@ public:
     //{
     //}
 
-    virtual PropositionMemberTypes GetType() const = 0;
+    virtual DomainMember* GetDomainMember() = 0;
+    virtual std::string ToString() = 0;
 };
 
 } }

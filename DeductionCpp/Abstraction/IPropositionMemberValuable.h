@@ -1,19 +1,20 @@
 #pragma once
 
+#include <string>
 #include "IPropositionMember.h"
 
 namespace DeductionCpp { namespace Abstraction {
 
-class IPropositionValue : public IPropositionMember
+class IPropositionMemberValuable : public IPropositionMember
 {
 protected:
 
 public:
-    IPropositionValue() : IPropositionMember()
+    IPropositionMemberValuable() : IPropositionMember()
     {
     }
 
-    //virtual ~IPropositionValue()
+    //virtual ~IPropositionMemberValuable()
     //{
     //}
 

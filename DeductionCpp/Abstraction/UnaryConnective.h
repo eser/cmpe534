@@ -1,7 +1,7 @@
 #pragma once
 
+#include <string>
 #include "IPropositionMember.h"
-#include "PropositionMemberTypes.h"
 
 namespace DeductionCpp { namespace Abstraction {
 
@@ -18,12 +18,16 @@ public:
     //{
     //}
 
-    virtual PropositionMemberTypes GetType() const
-    {
-        return PropositionMemberTypes::UnaryConnective;
-    }
-
     virtual bool Operation(bool value) = 0;
+
+    virtual std::string ToString()
+    {
+        std::string final = "";
+
+        final += this->GetDomainMember()->SymbolChar;
+
+        return final;
+    }
 };
 
 } }

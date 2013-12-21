@@ -84,25 +84,23 @@
     <ClInclude Include="Abstraction\Connectives\Implication.h" />
     <ClInclude Include="Abstraction\Connectives\Not.h" />
     <ClInclude Include="Abstraction\Connectives\Or.h" />
-    <ClInclude Include="Abstraction\Constants\False.h" />
-    <ClInclude Include="Abstraction\Constants\True.h" />
     <ClInclude Include="Abstraction\IPropositionMember.h" />
-    <ClInclude Include="Abstraction\IPropositionValue.h" />
+    <ClInclude Include="Abstraction\IPropositionMemberValuable.h" />
     <ClInclude Include="Abstraction\PropositionArray.h" />
-    <ClInclude Include="Abstraction\PropositionConstant.h" />
-    <ClInclude Include="Abstraction\PropositionMemberTypes.h" />
+    <ClInclude Include="Abstraction\DomainMemberTypes.h" />
+    <ClInclude Include="Abstraction\DomainMember.h" />
     <ClInclude Include="Abstraction\UnaryConnective.h" />
     <ClInclude Include="Parsing\Dumper.h" />
     <ClInclude Include="Parsing\Parser.h" />
-    <ClInclude Include="Parsing\SymbolRegistry.h" />
-    <ClInclude Include="Abstraction\PropositionVariable.h" />
+    <ClInclude Include="Abstraction\Domain.h" />
+    <ClInclude Include="Abstraction\PropositionSymbol.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parsing\Dumper.cpp" />
     <ClCompile Include="Parsing\Parser.cpp" />
-    <ClCompile Include="Parsing\SymbolRegistry.cpp" />
+    <ClCompile Include="Abstraction\Domain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

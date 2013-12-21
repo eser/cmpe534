@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Deduction.Parsing;
 using Deduction.Processors;
 
@@ -20,8 +21,9 @@ namespace Deduction
 
             Parser parser = new Parser(prop);
             var members = parser.Parse();
+            var dumped = Dumper.GetString(members);
             var simplified = Simplifier.Simplify(members);
-            var dumped = Dumper.GetString(simplified);
+            // var dumped = Dumper.GetString(simplified);
 
             var assigned = Evaluator.AssignValues(simplified, values);
             var assignedDump = Dumper.GetString(assigned);

@@ -1,12 +1,12 @@
 #pragma once
 
 #include <vector>
-#include "IPropositionValue.h"
-#include "PropositionMemberTypes.h"
+#include "Domain.h"
+#include "IPropositionMemberValuable.h"
 
 namespace DeductionCpp { namespace Abstraction {
 
-class PropositionArray : public IPropositionValue
+class PropositionArray : public IPropositionMemberValuable
 {
 protected:
     bool negated;
@@ -14,11 +14,16 @@ protected:
 public:
     std::vector<IPropositionMember*> Items;
 
-    PropositionArray(std::vector<IPropositionMember*> items) : IPropositionValue(), Items(items), negated(negated)
+    static IPropositionMember* CreateInstance(DomainMember& symbolInfo)
+    {
+        return new PropositionArray();
+    }
+
+    PropositionArray(std::vector<IPropositionMember*> items) : IPropositionMemberValuable(), Items(items), negated(negated)
     {
     }
 
-    PropositionArray() : IPropositionValue(), Items(), negated(negated)
+    PropositionArray() : IPropositionMemberValuable(), Items(), negated(negated)
     {
     }
 
@@ -32,10 +37,41 @@ public:
         return false;
     }
 
-    virtual PropositionMemberTypes GetType() const
+    virtual std::string ToString()
     {
-        return PropositionMemberTypes::Array;
+        std::string final = "";
+        int size = this->Items.size();
+
+        if (size == 0)
+        {
+            return final;
+        }
+
+        if (this->GetNegated())
+        {
+            final += '!';
+        }
+
+        if (size > 1) {
+            final += '(';
+        }
+
+        for (auto it = this->Items.begin(); it != this->Items.end(); it++) {
+            final += (*it)->ToString();
+        }
+
+        if (size > 1) {
+            final += ')';
+        }
+
+        return final;
     }
+
+    virtual DomainMember* GetDomainMember()
+    {
+        return Domain::Instance().GetMemberBySymbolChar('(');
+    }
+
 
     virtual bool GetNegated() const
     {
