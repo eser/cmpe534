@@ -1,5 +1,5 @@
 ﻿
-namespace Deduction.Abstraction.Connectives
+namespace Deduction.Abstraction
 {
     public interface IConnective : IPropositionMember
     {

@@ -1,15 +1,28 @@
 ﻿
 namespace Deduction.Abstraction
 {
-    public class PropositionSymbol : IPropositionValue
+    public class PropositionSymbol : IPropositionMemberNegable
     {
         protected readonly char letter;
+        protected bool? value;
         protected bool negated;
 
         public char Letter {
             get
             {
                 return this.letter;
+            }
+        }
+
+        public bool? Value
+        {
+            get
+            {
+                return this.value;
+            }
+            set
+            {
+                this.value = value;
             }
         }
 
@@ -25,10 +38,21 @@ namespace Deduction.Abstraction
             }
         }
 
-        public PropositionSymbol(char letter, bool negated = false)
+        public PropositionSymbol(char letter, bool? value = null, bool negated = false)
         {
             this.letter = letter;
+            this.value = value;
             this.negated = negated;
+        }
+
+        public override string ToString()
+        {
+            if (this.Negated)
+            {
+                return "!" + this.Letter.ToString();
+            }
+
+            return this.Letter.ToString();
         }
 
         public override bool Equals(object obj)

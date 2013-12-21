@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Deduction.Abstraction;
-using Deduction.Abstraction.Connectives;
-using Deduction.Abstraction.Constants;
+using Deduction.Abstraction.DomainMembers;
 
-namespace Deduction.Parsing
+namespace Deduction.Processors
 {
     public class Parser
     {
@@ -28,12 +27,7 @@ namespace Deduction.Parsing
                     break;
                 }
 
-                if (char.IsUpper(curr.Value))
-                {
-                    PropositionSymbol symbol = new PropositionSymbol(curr.Value);
-                    final.Items.Add(symbol);
-                }
-                else if (curr.Value == '(')
+                if (curr.Value == '(')
                 {
                     string insideParanthesis = this.GetInsideParanthesis();
 
@@ -41,35 +35,37 @@ namespace Deduction.Parsing
                     PropositionArray array = new PropositionArray(insideParser.Parse());
                     final.Items.Add(array);
                 }
+                else if (curr.Value == ')')
+                {
+                    continue;
+                }
+                else if (char.IsWhiteSpace(curr.Value))
+                {
+                    continue;
+                }
                 else
                 {
-                    bool found = false;
-
-                    foreach (KeyValuePair<char, Type> pair in SymbolRegistry.Instance.Connectives)
+                    DomainMember domainMember = Domain.GetMemberBySymbolChar(curr.Value);
+                    if (domainMember != null)
                     {
-                        if (curr.Value == pair.Key)
-                        {
-                            IConnective connectiveInstance = (IConnective)Activator.CreateInstance(pair.Value);
-                            final.Items.Add(connectiveInstance);
+                        object[] parameters;
 
-                            found = true;
-                            break;
+                        if (domainMember.Type.IsAssignableFrom(typeof(PropositionSymbol)))
+                        {
+                            parameters = new object[] { curr.Value, domainMember.Value, false };
                         }
+                        else
+                        {
+                            parameters = new object[0];
+                        }
+
+                        IPropositionMember propositionMember = (IPropositionMember)Activator.CreateInstance(domainMember.Type, parameters);
+                        final.Items.Add(propositionMember);
                     }
-
-                    if (!found)
+                    else
                     {
-                        foreach (KeyValuePair<char, Type> pair in SymbolRegistry.Instance.Constants)
-                        {
-                            if (curr.Value == pair.Key)
-                            {
-                                IConstant constantInstance = (IConstant)Activator.CreateInstance(pair.Value);
-                                final.Items.Add(constantInstance);
-
-                                found = true;
-                                break;
-                            }
-                        }
+                        IPropositionMember propositionMember = (IPropositionMember)Activator.CreateInstance(typeof(PropositionSymbol), new object[] { curr.Value, null, false });
+                        final.Items.Add(propositionMember);
                     }
                 }
             }

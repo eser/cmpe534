@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Deduction.Abstraction;
-using Deduction.Abstraction.Connectives;
+using Deduction.Abstraction.DomainMembers;
 
 namespace Deduction.Processors
 {
@@ -72,9 +72,9 @@ namespace Deduction.Processors
                 {
                     negate = !negate;
                 }
-                else if (member is IPropositionValue)
+                else if (member is IPropositionMemberNegable)
                 {
-                    IPropositionValue value = member as IPropositionValue;
+                    IPropositionMemberNegable value = member as IPropositionMemberNegable;
 
                     if (negate)
                     {

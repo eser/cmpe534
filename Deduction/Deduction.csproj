@@ -41,26 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstraction\Connectives\BinaryConnectiveBase.cs" />
-    <Compile Include="Abstraction\Connectives\UnaryConnectiveBase.cs" />
-    <Compile Include="Abstraction\Connectives\IConnective.cs" />
-    <Compile Include="Abstraction\Connectives\And.cs" />
-    <Compile Include="Abstraction\Constants\ConstantBase.cs" />
-    <Compile Include="Abstraction\Constants\False.cs" />
-    <Compile Include="Abstraction\Constants\IConstant.cs" />
-    <Compile Include="Abstraction\Constants\True.cs" />
-    <Compile Include="Abstraction\IPropositionValue.cs" />
+    <Compile Include="Abstraction\BinaryConnectiveBase.cs" />
+    <Compile Include="Abstraction\UnaryConnectiveBase.cs" />
+    <Compile Include="Abstraction\IConnective.cs" />
+    <Compile Include="Abstraction\DomainMembers\And.cs" />
+    <Compile Include="Abstraction\DomainMember.cs" />
+    <Compile Include="Abstraction\IPropositionMemberNegable.cs" />
     <Compile Include="Abstraction\PropositionArray.cs" />
-    <Compile Include="Abstraction\Connectives\Equivalence.cs" />
-    <Compile Include="Abstraction\Connectives\Implication.cs" />
-    <Compile Include="Abstraction\Connectives\Not.cs" />
-    <Compile Include="Abstraction\Connectives\Or.cs" />
+    <Compile Include="Abstraction\DomainMembers\Equivalence.cs" />
+    <Compile Include="Abstraction\DomainMembers\Implication.cs" />
+    <Compile Include="Abstraction\DomainMembers\Not.cs" />
+    <Compile Include="Abstraction\DomainMembers\Or.cs" />
     <Compile Include="Abstraction\IPropositionMember.cs" />
     <Compile Include="Abstraction\PropositionSymbol.cs" />
-    <Compile Include="Parsing\SymbolRegistry.cs" />
-    <Compile Include="Parsing\Dumper.cs" />
-    <Compile Include="Parsing\Parser.cs" />
-    <Compile Include="Processors\Evaluator.cs" />
+    <Compile Include="Abstraction\Domain.cs" />
+    <Compile Include="Processors\Evaluator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Processors\Parser.cs" />
     <Compile Include="Processors\Simplifier.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

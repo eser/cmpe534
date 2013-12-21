@@ -1,7 +1,7 @@
 ﻿
 namespace Deduction.Abstraction
 {
-    public interface IPropositionValue : IPropositionMember
+    public interface IPropositionMemberNegable : IPropositionMember
     {
         bool Negated { get; set; }
     }

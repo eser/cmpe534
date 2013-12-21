@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Deduction.Abstraction.Connectives;
+using Deduction.Abstraction.DomainMembers;
 
 namespace Deduction.Abstraction
 {
-    public class PropositionArray : IPropositionValue
+    public class PropositionArray : IPropositionMemberNegable
     {
         protected readonly List<IPropositionMember> items;
         protected bool negated;
@@ -36,6 +36,39 @@ namespace Deduction.Abstraction
         public PropositionArray(IEnumerable<IPropositionMember> items)
         {
             this.items = new List<IPropositionMember>(items);
+        }
+
+        public override string ToString()
+        {
+            string final = string.Empty;
+            int count = this.Items.Count;
+
+            if (count == 0)
+            {
+                return final;
+            }
+
+            if (this.Negated)
+            {
+                final += "!";
+            }
+
+            if (count > 1)
+            {
+                final += "(";
+            }
+
+            foreach (IPropositionMember member in this.Items)
+            {
+                final += member.ToString();
+            }
+
+            if (count > 1)
+            {
+                final += ")";
+            }
+
+            return final;
         }
 
         // TODO: implement Equals
@@ -74,7 +107,7 @@ namespace Deduction.Abstraction
         {
             foreach (IPropositionMember member in this.items)
             {
-                if (!(member is IPropositionValue || member is UnaryConnectiveBase))
+                if (!(member is IPropositionMemberNegable || member is UnaryConnectiveBase))
                 {
                     return false;
                 }

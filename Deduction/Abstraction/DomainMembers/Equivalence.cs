@@ -1,5 +1,5 @@
 ﻿
-namespace Deduction.Abstraction.Connectives
+namespace Deduction.Abstraction.DomainMembers
 {
     public class Equivalence : BinaryConnectiveBase
     {

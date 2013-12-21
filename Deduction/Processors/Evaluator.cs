@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Deduction.Abstraction;
-using Deduction.Abstraction.Connectives;
-using Deduction.Abstraction.Constants;
+using Deduction.Abstraction.DomainMembers;
 
 namespace Deduction.Processors
 {
@@ -36,32 +35,20 @@ namespace Deduction.Processors
 
                     arrayMembers.AddIntoPropositionArray(final);
                 }
-                else if ((member is ConstantBase) && !(member is False || member is True))
-                {
-                    ConstantBase constant = member as ConstantBase;
-
-                    if (constant.Value)
-                    {
-                        final.Items.Add(new True() { Negated = constant.Negated });
-                    }
-                    else
-                    {
-                        final.Items.Add(new False() { Negated = constant.Negated });
-                    }
-                }
                 else if (member is PropositionSymbol)
                 {
                     PropositionSymbol symbol = member as PropositionSymbol;
+                    DomainMember domainMember = Domain.GetMemberBySymbolChar(symbol.Letter);
 
-                    if (values.ContainsKey(symbol.Letter))
+                    if (domainMember == null /* && !domainMember.Value.HasValue */ && values.ContainsKey(symbol.Letter))
                     {
                         if (values[symbol.Letter])
                         {
-                            final.Items.Add(new True() { Negated = symbol.Negated });
+                            final.Items.Add(new PropositionSymbol('t', true, symbol.Negated));
                         }
                         else
                         {
-                            final.Items.Add(new False() { Negated = symbol.Negated });
+                            final.Items.Add(new PropositionSymbol('f', false, symbol.Negated));
                         }
                     }
                     else
@@ -105,23 +92,26 @@ namespace Deduction.Processors
                     continue;
                 }
 
-                IPropositionMember left = final.Items[position - 2];
+                PropositionSymbol left = final.Items[position - 2] as PropositionSymbol;
                 IPropositionMember middle = final.Items[position - 1];
-                IPropositionMember right = final.Items[position];
+                PropositionSymbol right = final.Items[position] as PropositionSymbol;
 
                 // left handside
                 bool leftTrue;
                 bool leftFalse;
 
-                if (left is True)
+                if (left != null && left.Value.HasValue)
                 {
-                    leftTrue = !(left as True).Negated;
-                    leftFalse = !leftTrue;
-                }
-                else if (left is False)
-                {
-                    leftTrue = (left as False).Negated;
-                    leftFalse = !leftTrue;
+                    if (left.Value.Value)
+                    {
+                        leftTrue = !left.Negated;
+                        leftFalse = !leftTrue;
+                    }
+                    else
+                    {
+                        leftTrue = left.Negated;
+                        leftFalse = !leftTrue;
+                    }
                 }
                 else
                 {
@@ -133,15 +123,18 @@ namespace Deduction.Processors
                 bool rightTrue;
                 bool rightFalse;
 
-                if (right is True)
+                if (right != null && right.Value.HasValue)
                 {
-                    rightTrue = !(right as True).Negated;
-                    rightFalse = !rightTrue;
-                }
-                else if (right is False)
-                {
-                    rightTrue = (right as False).Negated;
-                    rightFalse = !rightTrue;
+                    if (right.Value.Value)
+                    {
+                        rightTrue = !right.Negated;
+                        rightFalse = !rightTrue;
+                    }
+                    else
+                    {
+                        rightTrue = right.Negated;
+                        rightFalse = !rightTrue;
+                    }
                 }
                 else
                 {
@@ -157,7 +150,7 @@ namespace Deduction.Processors
                     if (leftFalse || rightFalse)
                     {
                         final.Items.RemoveRange(position - 2, 3);
-                        final.Items.Add(new False());
+                        final.Items.Add(new PropositionSymbol('f', false, false));
                     }
                     else if (leftTrue)
                     {
@@ -202,23 +195,26 @@ namespace Deduction.Processors
                     continue;
                 }
 
-                IPropositionMember left = final.Items[position - 2];
+                PropositionSymbol left = final.Items[position - 2] as PropositionSymbol;
                 IPropositionMember middle = final.Items[position - 1];
-                IPropositionMember right = final.Items[position];
+                PropositionSymbol right = final.Items[position] as PropositionSymbol;
 
                 // left handside
                 bool leftTrue;
                 bool leftFalse;
 
-                if (left is True)
+                if (left != null && left.Value.HasValue)
                 {
-                    leftTrue = !(left as True).Negated;
-                    leftFalse = !leftTrue;
-                }
-                else if (left is False)
-                {
-                    leftTrue = (left as False).Negated;
-                    leftFalse = !leftTrue;
+                    if (left.Value.Value)
+                    {
+                        leftTrue = !left.Negated;
+                        leftFalse = !leftTrue;
+                    }
+                    else
+                    {
+                        leftTrue = left.Negated;
+                        leftFalse = !leftTrue;
+                    }
                 }
                 else
                 {
@@ -230,15 +226,18 @@ namespace Deduction.Processors
                 bool rightTrue;
                 bool rightFalse;
 
-                if (right is True)
+                if (right != null && right.Value.HasValue)
                 {
-                    rightTrue = !(right as True).Negated;
-                    rightFalse = !rightTrue;
-                }
-                else if (right is False)
-                {
-                    rightTrue = (right as False).Negated;
-                    rightFalse = !rightTrue;
+                    if (right.Value.Value)
+                    {
+                        rightTrue = !right.Negated;
+                        rightFalse = !rightTrue;
+                    }
+                    else
+                    {
+                        rightTrue = right.Negated;
+                        rightFalse = !rightTrue;
+                    }
                 }
                 else
                 {
@@ -254,7 +253,7 @@ namespace Deduction.Processors
                     if (leftTrue || rightTrue)
                     {
                         final.Items.RemoveRange(position - 2, 3);
-                        final.Items.Add(new True());
+                        final.Items.Add(new PropositionSymbol('t', true, false));
                     }
                     else if (leftFalse)
                     {
