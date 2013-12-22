@@ -217,7 +217,7 @@ namespace Deduction.Processors
                     if (final[i].Equals(final[j]))
                     {
                         final.RemoveAt(j);
-                        // continue;
+                        continue;
                     }
 
                     j++;

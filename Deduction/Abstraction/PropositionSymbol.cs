@@ -58,7 +58,7 @@ namespace Deduction.Abstraction
         public override bool Equals(object obj)
         {
             PropositionSymbol symbol = obj as PropositionSymbol;
-            if (obj == null)
+            if (symbol == null)
             {
                 return false;
             }
