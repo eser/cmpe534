@@ -5,13 +5,13 @@ namespace Deduction.Abstraction
     public class DomainMember
     {
         // fields
-        protected readonly char symbolChar;
+        protected readonly string symbolChar;
         protected readonly Type type;
         protected readonly int precedence;
         protected readonly bool? value;
 
         // constructors
-        public DomainMember(char symbolChar, Type type, int precedence, bool? value)
+        public DomainMember(string symbolChar, Type type, int precedence, bool? value)
         {
             this.symbolChar = symbolChar;
             this.type = type;
@@ -20,7 +20,7 @@ namespace Deduction.Abstraction
         }
 
         // properties
-        public char SymbolChar
+        public string SymbolChar
         {
             get
             {

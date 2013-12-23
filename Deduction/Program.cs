@@ -9,16 +9,21 @@ namespace Deduction
     {
         public static void Main(string[] args)
         {
-            string prop = "(((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | f | t & D";
-            Dictionary<char, bool> values = new Dictionary<char, bool>()
+            string prop = "(((Anne & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | f | t and D";
+            Dictionary<string, bool> values = new Dictionary<string, bool>()
             {
-                { 'A', true },
-                { 'B', false },
-                { 'C', true } // ,
-                // { 'D', false }
+                { "A", true },
+                { "B", false },
+                { "C", true } // ,
+                // { "D", false }
             };
 
-            Parser parser = new Parser(prop);
+            Lexer lexer = new Lexer(prop);
+            var lexerOutput = lexer.Analyze();
+
+            Parser parser = new Parser(lexerOutput);
+            // parser.Grouper();
+
             var members = parser.Parse();
             var simplified = Simplifier.Simplify(members);
             var assigned = Evaluator.AssignValues(simplified, values);

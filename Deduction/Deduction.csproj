@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,6 +59,7 @@
     <Compile Include="Processors\Evaluator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Processors\Lexer.cs" />
     <Compile Include="Processors\Parser.cs" />
     <Compile Include="Processors\Simplifier.cs" />
     <Compile Include="Program.cs" />

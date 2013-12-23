@@ -3,11 +3,11 @@ namespace Deduction.Abstraction
 {
     public class PropositionSymbol : IPropositionMemberNegable
     {
-        protected readonly char letter;
+        protected readonly string letter;
         protected bool? value;
         protected bool negated;
 
-        public char Letter {
+        public string Letter {
             get
             {
                 return this.letter;
@@ -38,7 +38,7 @@ namespace Deduction.Abstraction
             }
         }
 
-        public PropositionSymbol(char letter, bool? value = null, bool negated = false)
+        public PropositionSymbol(string letter, bool? value = null, bool negated = false)
         {
             this.letter = letter;
             this.value = value;

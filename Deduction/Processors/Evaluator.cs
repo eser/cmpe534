@@ -6,7 +6,7 @@ namespace Deduction.Processors
 {
     public static class Evaluator
     {
-        public static PropositionArray Evaluate(PropositionArray input, Dictionary<char, bool> values)
+        public static PropositionArray Evaluate(PropositionArray input, Dictionary<string, bool> values)
         {
             PropositionArray simplified;
 
@@ -19,7 +19,7 @@ namespace Deduction.Processors
             return simplified;
         }
 
-        public static PropositionArray AssignValues(PropositionArray input, Dictionary<char, bool> values)
+        public static PropositionArray AssignValues(PropositionArray input, Dictionary<string, bool> values)
         {
             PropositionArray final = new PropositionArray()
             {
@@ -44,11 +44,11 @@ namespace Deduction.Processors
                     {
                         if (values[symbol.Letter])
                         {
-                            final.Items.Add(new PropositionSymbol('t', true, symbol.Negated));
+                            final.Items.Add(new PropositionSymbol("t", true, symbol.Negated));
                         }
                         else
                         {
-                            final.Items.Add(new PropositionSymbol('f', false, symbol.Negated));
+                            final.Items.Add(new PropositionSymbol("f", false, symbol.Negated));
                         }
                     }
                     else
@@ -150,7 +150,7 @@ namespace Deduction.Processors
                     if (leftFalse || rightFalse)
                     {
                         final.Items.RemoveRange(position - 2, 3);
-                        final.Items.Add(new PropositionSymbol('f', false, false));
+                        final.Items.Add(new PropositionSymbol("f", false, false));
                     }
                     else if (leftTrue)
                     {
@@ -253,7 +253,7 @@ namespace Deduction.Processors
                     if (leftTrue || rightTrue)
                     {
                         final.Items.RemoveRange(position - 2, 3);
-                        final.Items.Add(new PropositionSymbol('t', true, false));
+                        final.Items.Add(new PropositionSymbol("t", true, false));
                     }
                     else if (leftFalse)
                     {

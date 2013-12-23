@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Deduction.Abstraction;
-using Deduction.Abstraction.DomainMembers;
 
 namespace Deduction.Processors
 {
     public class Parser
     {
-        protected readonly string line;
+        protected List<string> line;
         protected int currentPosition;
 
-        public Parser(string line)
+        public Parser(List<string> line)
         {
             this.line = line;
             this.currentPosition = 0;
@@ -20,39 +19,37 @@ namespace Deduction.Processors
         {
             PropositionArray final = new PropositionArray();
 
+            this.Reset();
+
             while (true) {
-                char? curr = this.GetNext();
-                if (!curr.HasValue)
+                string curr = this.GetNext();
+                if (curr == null)
                 {
                     break;
                 }
 
-                if (curr.Value == '(')
+                if (curr == "(")
                 {
-                    string insideParanthesis = this.GetInsideParanthesis();
+                    List<string> insideParanthesis = this.GetInsideParanthesis();
 
                     Parser insideParser = new Parser(insideParanthesis);
                     PropositionArray array = new PropositionArray(insideParser.Parse());
                     final.Items.Add(array);
                 }
-                else if (curr.Value == ')')
-                {
-                    continue;
-                }
-                else if (char.IsWhiteSpace(curr.Value))
+                else if (curr == ")")
                 {
                     continue;
                 }
                 else
                 {
-                    DomainMember domainMember = Domain.GetMemberBySymbolChar(curr.Value);
+                    DomainMember domainMember = Domain.GetMemberBySymbolChar(curr);
                     if (domainMember != null)
                     {
                         object[] parameters;
 
                         if (domainMember.Type.IsAssignableFrom(typeof(PropositionSymbol)))
                         {
-                            parameters = new object[] { curr.Value, domainMember.Value, false };
+                            parameters = new object[] { curr, domainMember.Value, false };
                         }
                         else
                         {
@@ -64,7 +61,7 @@ namespace Deduction.Processors
                     }
                     else
                     {
-                        IPropositionMember propositionMember = (IPropositionMember)Activator.CreateInstance(typeof(PropositionSymbol), new object[] { curr.Value, null, false });
+                        IPropositionMember propositionMember = (IPropositionMember)Activator.CreateInstance(typeof(PropositionSymbol), new object[] { curr, null, false });
                         final.Items.Add(propositionMember);
                     }
                 }
@@ -73,9 +70,63 @@ namespace Deduction.Processors
             return final;
         }
 
-        protected char? GetNext()
+        //public void Grouper()
+        //{
+        //    DomainMember[] domainMembers = Domain.GetMembersSorted();
+
+        //    foreach (DomainMember domainMember in domainMembers)
+        //    {
+        //        string final = string.Empty;
+
+        //        this.Reset();
+
+        //        while (true)
+        //        {
+        //            string curr = this.GetNext();
+        //            if (curr == null)
+        //            {
+        //                break;
+        //            }
+
+        //            if (curr == "(" || curr == ")")
+        //            {
+        //                final += curr;
+        //                continue;
+        //            }
+
+        //            if (typeof(UnaryConnectiveBase).IsAssignableFrom(domainMember.Type))
+        //            {
+        //                if (domainMember.SymbolChar == curr)
+        //                {
+        //                    final += domainMember.SymbolChar + "(" + this.GetNext() + ")";
+        //                }
+        //                else
+        //                {
+        //                    final += curr;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                final += curr;
+        //            }
+        //            //else if (domainMember.Type.IsAssignableFrom(typeof(BinaryConnectiveBase)))
+        //            //{
+        //            //    if (domainMember.SymbolChar == curr.Value)
+        //            //    {
+
+        //            //    }
+        //            //}
+        //        }
+
+        //        this.line = final;
+        //    }
+
+        //    Console.WriteLine(this.line);
+        //}
+
+        protected string GetNext()
         {
-            if (this.currentPosition >= this.line.Length)
+            if (this.currentPosition >= this.line.Count)
             {
                 return null;
             }
@@ -83,19 +134,24 @@ namespace Deduction.Processors
             return this.line[this.currentPosition++];
         }
 
-        protected string GetInsideParanthesis()
+        protected void Reset()
+        {
+            this.currentPosition = 0;
+        }
+
+        protected List<string> GetInsideParanthesis()
         {
             int paranthesisCount = 1;
             int i = this.currentPosition;
 
-            for (; i < this.line.Length; i++)
+            for (; i < this.line.Count; i++)
             {
-                if (this.line[i] == '(')
+                if (this.line[i] == "(")
                 {
                     paranthesisCount++;
                     continue;
                 }
-                else if (this.line[i] == ')')
+                else if (this.line[i] == ")")
                 {
                     paranthesisCount--;
                 }
@@ -108,7 +164,7 @@ namespace Deduction.Processors
 
             if (paranthesisCount == 0)
             {
-                string result = this.line.Substring(this.currentPosition, i - this.currentPosition);
+                List<string> result = this.line.GetRange(this.currentPosition, i - this.currentPosition);
                 this.currentPosition = i;
 
                 return result;

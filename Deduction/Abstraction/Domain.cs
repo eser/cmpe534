@@ -34,14 +34,14 @@ namespace Deduction.Abstraction
         {
             this.members = new List<DomainMember>()
             {
-                new DomainMember('&', typeof(And), 2, null),
-                new DomainMember('|', typeof(Or), 3, null),
-                new DomainMember('!', typeof(Not), 1, null),
-                new DomainMember('>', typeof(Implication), 4, null),
-                new DomainMember('=', typeof(Equivalence), 4, null),
+                new DomainMember("&", typeof(And), 2, null),
+                new DomainMember("|", typeof(Or), 3, null),
+                new DomainMember("!", typeof(Not), 1, null),
+                new DomainMember(">", typeof(Implication), 4, null),
+                new DomainMember("=", typeof(Equivalence), 4, null),
 
-                new DomainMember('f', typeof(PropositionSymbol), 0, false),
-                new DomainMember('t', typeof(PropositionSymbol), 0, true)
+                new DomainMember("f", typeof(PropositionSymbol), 0, false),
+                new DomainMember("t", typeof(PropositionSymbol), 0, true)
             };
         }
 
@@ -58,7 +58,7 @@ namespace Deduction.Abstraction
             return null;
         }
 
-        public static DomainMember GetMemberBySymbolChar(char symbolChar)
+        public static DomainMember GetMemberBySymbolChar(string symbolChar)
         {
             foreach (DomainMember domainMember in Domain.Instance.Members)
             {
@@ -69,6 +69,31 @@ namespace Deduction.Abstraction
             }
 
             return null;
+        }
+
+        public static DomainMember[] GetMembersSorted()
+        {
+            DomainMember[] domainMembers = Domain.Instance.Members.ToArray();
+
+            Array.Sort(
+                domainMembers,
+                (DomainMember x, DomainMember y) =>
+                {
+                    if (x.Precedence > y.Precedence)
+                    {
+                        return 1;
+                    }
+
+                    if (y.Precedence > x.Precedence)
+                    {
+                        return -1;
+                    }
+
+                    return 0;
+                }
+            );
+
+            return domainMembers;
         }
     }
 }
