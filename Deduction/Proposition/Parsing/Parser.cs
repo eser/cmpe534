@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Deduction.Abstraction;
+using Deduction.Proposition.Abstraction;
 
-namespace Deduction.Parsing
+namespace Deduction.Proposition.Parsing
 {
     public class Parser
     {
@@ -12,14 +12,14 @@ namespace Deduction.Parsing
 
         protected int currentPosition;
         protected Stack<Token> connectives;
-        protected Stack<IPropositionMember> members;
+        protected Stack<IMember> members;
 
         public Parser(Registry registry)
         {
             this.registry = registry;
         }
 
-        public IPropositionMember Parse(List<Token> tokens)
+        public IMember Parse(List<Token> tokens)
         {
             Stack<RegistryMember> parentheses = new Stack<RegistryMember>();
 
@@ -114,12 +114,12 @@ namespace Deduction.Parsing
         protected void MakeNodeTree()
         {
             Token poppedConnective = this.connectives.Pop();
-            Connective connective = (Connective)Activator.CreateInstance(poppedConnective.RegistryMember.Type, new IPropositionMember[0]);
+            Connective connective = (Connective)Activator.CreateInstance(poppedConnective.RegistryMember.Type, new IMember[0]);
 
-            IPropositionMember[] connectiveParameters = new IPropositionMember[connective.ParameterCount];
+            IMember[] connectiveParameters = new IMember[connective.ParameterCount];
             for (int i = connective.ParameterCount - 1; i >= 0; i--)
             {
-                IPropositionMember poppedMember = this.members.Pop();
+                IMember poppedMember = this.members.Pop();
                 connectiveParameters[i] = poppedMember;
             }
             connective.Parameters.AddRange(connectiveParameters);
@@ -142,7 +142,7 @@ namespace Deduction.Parsing
             this.currentPosition = 0;
 
             this.connectives = new Stack<Token>();
-            this.members = new Stack<IPropositionMember>();
+            this.members = new Stack<IMember>();
         }
     }
 }

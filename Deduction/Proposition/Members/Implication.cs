@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using Deduction.Abstraction;
+using Deduction.Proposition.Abstraction;
 
-namespace Deduction.PropositionMembers
+namespace Deduction.Proposition.Members
 {
-    public class Not : Connective
+    public class Implication : Connective
     {
-        public Not(params IPropositionMember[] parameters)
+        public Implication(params IMember[] parameters)
             : base(parameters)
         {
         }
 
-        public Not(IEnumerable<IPropositionMember> parameters)
+        public Implication(IEnumerable<IMember> parameters)
             : base(parameters)
         {
         }
@@ -19,7 +19,7 @@ namespace Deduction.PropositionMembers
         {
             get
             {
-                return 1;
+                return 2;
             }
         }
         public override bool RightAssociative
@@ -32,7 +32,7 @@ namespace Deduction.PropositionMembers
 
         public override bool Operation(bool[] values)
         {
-            return !values[0];
+            return !(values[0] && !values[1]);
         }
     }
 }

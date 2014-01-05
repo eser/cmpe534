@@ -1,7 +1,7 @@
 ﻿
-namespace Deduction.Abstraction
+namespace Deduction.Proposition.Abstraction
 {
-    public class Symbol : IPropositionMember
+    public class Symbol : IMember
     {
         protected readonly string letter;
 

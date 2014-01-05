@@ -1,5 +1,5 @@
 ﻿
-namespace Deduction.Parsing
+namespace Deduction.Proposition.Parsing
 {
     public class Token
     {

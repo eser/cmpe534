@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Deduction.Parsing
+namespace Deduction.Proposition.Parsing
 {
     public class RegistryMember
     {

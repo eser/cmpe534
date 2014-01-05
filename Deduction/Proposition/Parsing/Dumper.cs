@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using Deduction.Abstraction;
+using Deduction.Proposition.Abstraction;
 
-namespace Deduction.Parsing
+namespace Deduction.Proposition.Parsing
 {
     public class Dumper
     {
@@ -12,7 +12,7 @@ namespace Deduction.Parsing
             this.registry = registry;
         }
 
-        public string Dump(IPropositionMember input)
+        public string Dump(IMember input)
         {
             StringBuilder output = new StringBuilder();
 

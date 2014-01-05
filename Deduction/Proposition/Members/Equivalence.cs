@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using Deduction.Proposition.Abstraction;
 
-namespace Deduction.Abstraction
+namespace Deduction.Proposition.Members
 {
-    public class Parenthesis : Connective
+    public class Equivalence : Connective
     {
-        public Parenthesis(params IPropositionMember[] parameters)
+        public Equivalence(params IMember[] parameters)
             : base(parameters)
         {
         }
 
-        public Parenthesis(IEnumerable<IPropositionMember> parameters)
+        public Equivalence(IEnumerable<IMember> parameters)
             : base(parameters)
         {
         }
@@ -18,9 +19,10 @@ namespace Deduction.Abstraction
         {
             get
             {
-                return 0;
+                return 2;
             }
         }
+
         public override bool RightAssociative
         {
             get
@@ -31,7 +33,7 @@ namespace Deduction.Abstraction
 
         public override bool Operation(bool[] values)
         {
-            return false;
+            return !(values[0] && !values[1]) && !(!values[0] && values[1]);
         }
     }
 }

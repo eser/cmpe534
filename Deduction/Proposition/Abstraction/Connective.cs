@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Deduction.Abstraction
+namespace Deduction.Proposition.Abstraction
 {
-    public abstract class Connective : IPropositionMember
+    public abstract class Connective : IMember
     {
-        protected readonly List<IPropositionMember> parameters;
+        protected readonly List<IMember> parameters;
 
-        public List<IPropositionMember> Parameters
+        public List<IMember> Parameters
         {
             get
             {
@@ -14,14 +14,14 @@ namespace Deduction.Abstraction
             }
         }
 
-        public Connective(params IPropositionMember[] parameters)
+        public Connective(params IMember[] parameters)
         {
-            this.parameters = new List<IPropositionMember>(parameters);
+            this.parameters = new List<IMember>(parameters);
         }
 
-        public Connective(IEnumerable<IPropositionMember> parameters)
+        public Connective(IEnumerable<IMember> parameters)
         {
-            this.parameters = new List<IPropositionMember>(parameters);
+            this.parameters = new List<IMember>(parameters);
         }
 
         public abstract int ParameterCount

@@ -42,25 +42,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstraction\Connective.cs" />
-    <Compile Include="Parsing\Dumper.cs">
+    <Compile Include="Proposition\Abstraction\Connective.cs" />
+    <Compile Include="Proposition\Parsing\Dumper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Parsing\Parser.cs">
+    <Compile Include="Proposition\Parsing\Parser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Parsing\Token.cs" />
-    <Compile Include="Abstraction\Parenthesis.cs" />
-    <Compile Include="PropositionMembers\And.cs" />
-    <Compile Include="Parsing\RegistryMember.cs" />
-    <Compile Include="PropositionMembers\Equivalence.cs" />
-    <Compile Include="PropositionMembers\Implication.cs" />
-    <Compile Include="PropositionMembers\Not.cs" />
-    <Compile Include="PropositionMembers\Or.cs" />
-    <Compile Include="Abstraction\IPropositionMember.cs" />
-    <Compile Include="Abstraction\Symbol.cs" />
-    <Compile Include="Parsing\Registry.cs" />
-    <Compile Include="Parsing\Lexer.cs" />
+    <Compile Include="Proposition\Parsing\Token.cs" />
+    <Compile Include="Proposition\Abstraction\Parenthesis.cs" />
+    <Compile Include="Proposition\Members\And.cs" />
+    <Compile Include="Proposition\Parsing\RegistryMember.cs" />
+    <Compile Include="Proposition\Members\Equivalence.cs" />
+    <Compile Include="Proposition\Members\Implication.cs" />
+    <Compile Include="Proposition\Members\Not.cs" />
+    <Compile Include="Proposition\Members\Or.cs" />
+    <Compile Include="Proposition\Abstraction\IMember.cs" />
+    <Compile Include="Proposition\Abstraction\Symbol.cs" />
+    <Compile Include="Proposition\Parsing\Registry.cs" />
+    <Compile Include="Proposition\Parsing\Lexer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

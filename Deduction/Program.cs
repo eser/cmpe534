@@ -1,7 +1,7 @@
 ﻿using System;
-using Deduction.Abstraction;
-using Deduction.Parsing;
-using Deduction.PropositionMembers;
+using Deduction.Proposition.Abstraction;
+using Deduction.Proposition.Members;
+using Deduction.Proposition.Parsing;
 
 namespace Deduction
 {

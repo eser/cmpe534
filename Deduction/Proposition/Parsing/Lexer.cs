@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Deduction.Parsing
+namespace Deduction.Proposition.Parsing
 {
     public class Lexer
     {
