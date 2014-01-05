@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GentzenPrime\Tree.cs" />
     <Compile Include="Proposition\Abstraction\Connective.cs" />
     <Compile Include="Proposition\Parsing\Dumper.cs">
       <SubType>Code</SubType>
