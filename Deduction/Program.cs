@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Deduction.Processors;
+using Deduction.Abstraction;
+using Deduction.Parsing;
+using Deduction.PropositionMembers;
 
 namespace Deduction
 {
@@ -9,30 +9,31 @@ namespace Deduction
     {
         public static void Main(string[] args)
         {
-            string prop = "(((Anne & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | f | t and D";
-            Dictionary<string, bool> values = new Dictionary<string, bool>()
-            {
-                { "A", true },
-                { "B", false },
-                { "C", true } // ,
-                // { "D", false }
-            };
+            Registry registry = new Registry();
+            registry.AddMembers(
+                new RegistryMember("!", typeof(Not), precedence: 1, isRightAssociative: true, aliases: new string[] { "not" }),
+                new RegistryMember("&", typeof(And), precedence: 4, aliases: new string[] { "and" }),
+                new RegistryMember("|", typeof(Or), precedence: 5, aliases: new string[] { "or" }),
+                new RegistryMember(">", typeof(Implication), precedence: 6, aliases: new string[] { "implies" }),
+                new RegistryMember("=", typeof(Equivalence), precedence: 6, aliases: new string[] { "equals" }),
 
-            Lexer lexer = new Lexer(prop);
-            var lexerOutput = lexer.Analyze();
+                new RegistryMember("[", typeof(Parenthesis), precedence: 101, closesWith: "]"),
+                new RegistryMember("(", typeof(Parenthesis), precedence: 101, closesWith: ")"),
 
-            Parser parser = new Parser(lexerOutput);
-            // parser.Grouper();
+                new RegistryMember("f", typeof(Symbol), precedence: 0, value: false, aliases: new string[] { "0", "false" }),
+                new RegistryMember("t", typeof(Symbol), precedence: 0, value: true, aliases: new string[] { "1", "true" })
+            );
 
-            var members = parser.Parse();
-            var simplified = Simplifier.Simplify(members);
-            var assigned = Evaluator.AssignValues(simplified, values);
-            var evaluated = Evaluator.Evaluate(simplified, values);
+            // string prop = "(((Anne & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | f | t and D";
+            string prop = "(A | B) & C";
+
+            Lexer lexer = new Lexer(registry, prop);
+            var tokens = lexer.Analyze();
+
+            Parser parser = new Parser(registry);
+            var rootOfTree = parser.Parse(tokens);
 
             Console.WriteLine("proposition = {0}", prop);
-            Console.WriteLine("simplified  = {0}", simplified.ToString());
-            Console.WriteLine("assigned    = {0}", assigned.ToString());
-            Console.WriteLine("evaluated   = {0}", evaluated.ToString());
 
             Console.Read();
         }

@@ -1,32 +1,38 @@
 ﻿using System.Collections.Generic;
 
-namespace Deduction.Processors
+namespace Deduction.Parsing
 {
     public class Lexer
     {
+        protected readonly Registry registry;
         protected readonly string line;
         protected int currentPosition;
 
-        public Lexer(string line)
+        public Lexer(Registry registry, string line)
         {
+            this.registry = registry;
             this.line = line;
             this.currentPosition = 0;
         }
 
-        public List<string> Analyze()
+        public List<Token> Analyze()
         {
-            List<string> final = new List<string>();
-            
+            List<Token> final = new List<Token>();
+
             this.Reset();
 
-            while (true) {
+            while (true)
+            {
                 string curr = this.GetNext();
                 if (curr == null)
                 {
                     break;
                 }
 
-                final.Add(curr);
+                RegistryMember registryMember = registry.GetMemberBySymbolChar(curr);
+                Token token = new Token(curr, registryMember);
+
+                final.Add(token);
             }
 
             return final;
