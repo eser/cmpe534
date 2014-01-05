@@ -33,7 +33,11 @@ namespace Deduction
             Parser parser = new Parser(registry);
             var rootOfTree = parser.Parse(tokens);
 
+            Dumper dumper = new Dumper(registry);
+            var dumped = dumper.Dump(rootOfTree);
+
             Console.WriteLine("proposition = {0}", prop);
+            Console.WriteLine("dumped      = {0}", dumped);
 
             Console.Read();
         }

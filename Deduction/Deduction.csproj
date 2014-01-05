@@ -43,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstraction\Connective.cs" />
+    <Compile Include="Parsing\Dumper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Parsing\Parser.cs">
       <SubType>Code</SubType>
     </Compile>
