@@ -16,6 +16,8 @@ Project #1: Deduction
 
 * Merge all connective operations with precedence, and do it with BinaryConnectiveBase.Operation()
 
+* NOT simplifications
+
 
 **Roadmap:**
 
@@ -26,10 +28,10 @@ Project #1: Deduction
 
 **Output:**
 ``` bash
-proposition = (((A & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | t & D
-simplified  = (A & B & C) | (!C & D | D) | f | t & D
-assigned    = (t & f & t) | (!t & D | D) | f | t & D
-evaluated   = D
+proposition  = (First | Second) & (A | B) & C
+dumped root  = (((First | Second) & (A | B)) & C)
+assigned     = (((First | First) & (A | t)) & C)
+simplified   = ((First & t) & C)
 ```
 
 

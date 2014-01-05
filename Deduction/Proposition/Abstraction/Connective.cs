@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Deduction.Proposition.Parsing;
 
 namespace Deduction.Proposition.Abstraction
 {
@@ -29,12 +31,12 @@ namespace Deduction.Proposition.Abstraction
             get;
         }
 
-        public abstract bool RightAssociative
-        {
-            get;
-        }
-
         public abstract bool Operation(bool[] values);
+
+        public virtual IMember Simplify(Registry registry)
+        {
+            return null;
+        }
 
         public override bool Equals(object obj)
         {
@@ -67,6 +69,18 @@ namespace Deduction.Proposition.Abstraction
             {
                 return this.GetType().GetHashCode() + this.Parameters.GetHashCode();
             }
+        }
+
+        public object Clone()
+        {
+            Connective clone = Activator.CreateInstance(this.GetType(), new IMember[0]) as Connective;
+
+            for (int i = 0; i < clone.ParameterCount; i++)
+            {
+                clone.Parameters.Add(this.Parameters[i].Clone() as IMember);
+            }
+
+            return clone;
         }
     }
 }

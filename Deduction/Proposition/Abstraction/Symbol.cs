@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Deduction.Proposition.Abstraction
 {
     public class Symbol : IMember
@@ -32,6 +33,11 @@ namespace Deduction.Proposition.Abstraction
         public override int GetHashCode()
         {
             return this.letter.GetHashCode();
+        }
+
+        public object Clone()
+        {
+            return Activator.CreateInstance(this.GetType(), this.Letter);
         }
     }
 }

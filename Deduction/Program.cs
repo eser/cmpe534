@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Members;
 using Deduction.Proposition.Parsing;
+using Deduction.Proposition.Processors;
 
 namespace Deduction
 {
@@ -25,7 +27,7 @@ namespace Deduction
             );
 
             // string prop = "(((Anne & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | f | t and D";
-            string prop = "(A | B) & C";
+            string prop = "(First | Second) & (A | B) & C";
 
             Lexer lexer = new Lexer(registry, prop);
             var tokens = lexer.Analyze();
@@ -33,11 +35,23 @@ namespace Deduction
             Parser parser = new Parser(registry);
             var rootOfTree = parser.Parse(tokens);
 
-            Dumper dumper = new Dumper(registry);
-            var dumped = dumper.Dump(rootOfTree);
+            Substitutor substitutor = new Substitutor(registry);
+            var table = new Dictionary<string, string>()
+            {
+                // { "&", "=" },
+                { "Second", "First" },
+                { "B", "t" },
+            };
+            var assigned = substitutor.Substitute(rootOfTree, table);
 
-            Console.WriteLine("proposition = {0}", prop);
-            Console.WriteLine("dumped      = {0}", dumped);
+            Simplifier simplifier = new Simplifier(registry);
+            var simplified = simplifier.Simplify(assigned);
+
+            Dumper dumper = new Dumper(registry);
+            Console.WriteLine("proposition  = {0}", prop);
+            Console.WriteLine("dumped root  = {0}", dumper.Dump(rootOfTree));
+            Console.WriteLine("assigned     = {0}", dumper.Dump(assigned));
+            Console.WriteLine("simplified   = {0}", dumper.Dump(simplified));
 
             Console.Read();
         }

@@ -1,7 +1,8 @@
 ﻿using System.Text;
 using Deduction.Proposition.Abstraction;
+using Deduction.Proposition.Parsing;
 
-namespace Deduction.Proposition.Parsing
+namespace Deduction.Proposition.Processors
 {
     public class Dumper
     {

@@ -22,13 +22,6 @@ namespace Deduction.Proposition.Members
                 return 2;
             }
         }
-        public override bool RightAssociative
-        {
-            get
-            {
-                return false;
-            }
-        }
 
         public override bool Operation(bool[] values)
         {

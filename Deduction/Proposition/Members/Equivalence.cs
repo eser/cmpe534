@@ -23,14 +23,6 @@ namespace Deduction.Proposition.Members
             }
         }
 
-        public override bool RightAssociative
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         public override bool Operation(bool[] values)
         {
             return !(values[0] && !values[1]) && !(!values[0] && values[1]);

@@ -1,7 +1,8 @@
-﻿
+﻿using System;
+
 namespace Deduction.Proposition.Abstraction
 {
-    public interface IMember
+    public interface IMember : ICloneable
     {
     }
 }
