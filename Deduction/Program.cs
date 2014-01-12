@@ -27,15 +27,15 @@ namespace Deduction
 
             // proposition tests including parsing, valuation, simplification.
             // string prop = "(((Anne & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | f | t and D";
-            string prop = "(First | Second) & (A | B) & C";
-            PropositionTests.Test(Console.Out, registry, prop);
+            //string prop = "(First | Second) & (A | B) & C";
+            //PropositionTests.Test(Console.Out, registry, prop);
 
-            // sequent tests including parsing
-            // string sequent = "A, (First | Second) & (A | B) & C -> A, B, C";
-            string sequent = "A = B ->";
-            SequentTests.Test(Console.Out, registry, sequent);
+            Commands commands = new Commands(registry, Console.Out);
+            commands.Help();
 
-            Console.Read();
+            while (commands.Interprete(Console.In))
+            {
+            }
         }
     }
 }

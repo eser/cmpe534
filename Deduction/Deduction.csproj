@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands.cs" />
     <Compile Include="GentzenPrime\Abstraction\SequentDirection.cs" />
     <Compile Include="GentzenPrime\Abstraction\BranchDistribution.cs" />
     <Compile Include="GentzenPrime\Abstraction\Sequent.cs" />
@@ -71,7 +72,6 @@
     <Compile Include="Proposition\Processors\Simplifier.cs" />
     <Compile Include="Proposition\Processors\Substitutor.cs" />
     <Compile Include="Proposition\Processors\Dumper.cs" />
-    <Compile Include="Tests\ConsoleOut\SequentTests.cs" />
     <Compile Include="Tests\ConsoleOut\PropositionTests.cs" />
   </ItemGroup>
   <ItemGroup>
