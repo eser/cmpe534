@@ -32,6 +32,7 @@ namespace Deduction.Tests.ConsoleOut
             output.WriteLine("Dumper.Dump()             = {0}", dumper.Dump(rootOfTree));
             output.WriteLine("Substitutor.Substitute()  = {0}", dumper.Dump(assigned));
             output.WriteLine("Simplifier.Simplify()     = {0}", dumper.Dump(simplified));
+            output.WriteLine();
         }
     }
 }

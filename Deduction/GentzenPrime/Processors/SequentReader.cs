@@ -1,40 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using Deduction.Proposition.Abstraction;
+using Deduction.GentzenPrime.Abstraction;
 using Deduction.Proposition.Parsing;
 
-namespace Deduction.GentzenPrime
+namespace Deduction.GentzenPrime.Processors
 {
-    public class Sequent
+    public class SequentReader
     {
-        public const string SEQUENT_SEPERATOR = "->";
-        public const string ITEM_SEPERATOR = ",";
-
-        protected List<IMember> left;
-        protected List<IMember> right;
-
-        public Sequent()
-        {
-            this.left = new List<IMember>();
-            this.right = new List<IMember>();
-        }
-
-        public List<IMember> Left
-        {
-            get
-            {
-                return this.left;
-            }
-        }
-
-        public List<IMember> Right
-        {
-            get
-            {
-                return this.right;
-            }
-        }
-
         public static Sequent Read(Registry registry, string prop)
         {
             string[] propParts = prop.Split(new string[] { Sequent.SEQUENT_SEPERATOR }, StringSplitOptions.None);
@@ -67,24 +38,8 @@ namespace Deduction.GentzenPrime
                     }
                 }
             }
-            
+
             return sequent;
-        }
-
-        public bool IsAxiom()
-        {
-            foreach (IMember leftMember in this.Left)
-            {
-                foreach (IMember rightMember in this.Right)
-                {
-                    if (leftMember.Equals(rightMember))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
     }
 }

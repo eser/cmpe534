@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Deduction.GentzenPrime
+namespace Deduction.GentzenPrime.Abstraction
 {
     public class Tree<T>
     {
@@ -75,6 +75,19 @@ namespace Deduction.GentzenPrime
             foreach (Tree<T> child in this.Children)
             {
                 child.Traverse(action);
+            }
+        }
+
+        public void BreadthFirstNodes(Queue<Tree<T>> queue)
+        {
+            foreach (Tree<T> child in this.Children)
+            {
+                queue.Enqueue(child);
+            }
+
+            foreach (Tree<T> child in this.Children)
+            {
+                child.BreadthFirstNodes(queue);
             }
         }
     }
