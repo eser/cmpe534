@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Members;
 using Deduction.Proposition.Parsing;
-using Deduction.Proposition.Processors;
+using Deduction.Tests.ConsoleOut;
 
 namespace Deduction
 {
@@ -26,32 +25,16 @@ namespace Deduction
                 new RegistryMember("t", typeof(Symbol), precedence: 0, value: true, aliases: new string[] { "1", "true" })
             );
 
+            // proposition tests including parsing, valuation, simplification.
             // string prop = "(((Anne & A) & B) & (B & C)) | (!C & D | D | D) | !!!(!f) | f | f | t and D";
             string prop = "(First | Second) & (A | B) & C";
+            PropositionTests.Test(Console.Out, registry, prop);
 
-            Lexer lexer = new Lexer(registry, prop);
-            var tokens = lexer.Analyze();
+            Console.WriteLine();
 
-            Parser parser = new Parser(registry);
-            var rootOfTree = parser.Parse(tokens);
-
-            Substitutor substitutor = new Substitutor(registry);
-            var table = new Dictionary<string, string>()
-            {
-                // { "&", "=" },
-                { "Second", "First" },
-                { "B", "t" },
-            };
-            var assigned = substitutor.Substitute(rootOfTree, table);
-
-            Simplifier simplifier = new Simplifier(registry);
-            var simplified = simplifier.Simplify(assigned);
-
-            Dumper dumper = new Dumper(registry);
-            Console.WriteLine("proposition  = {0}", prop);
-            Console.WriteLine("dumped root  = {0}", dumper.Dump(rootOfTree));
-            Console.WriteLine("assigned     = {0}", dumper.Dump(assigned));
-            Console.WriteLine("simplified   = {0}", dumper.Dump(simplified));
+            // sequent tests including parsing
+            string sequent = "A, (First | Second) & (A | B) & C -> A, B, C";
+            SequentTests.Test(Console.Out, registry, sequent);
 
             Console.Read();
         }

@@ -26,6 +26,14 @@ namespace Deduction.Proposition.Abstraction
             this.parameters = new List<IMember>(parameters);
         }
 
+        public bool IsAtomic
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public abstract int ParameterCount
         {
             get;

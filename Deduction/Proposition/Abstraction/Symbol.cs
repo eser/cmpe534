@@ -19,6 +19,14 @@ namespace Deduction.Proposition.Abstraction
             this.letter = letter;
         }
 
+        public bool IsAtomic
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override bool Equals(object obj)
         {
             Symbol symbol = obj as Symbol;

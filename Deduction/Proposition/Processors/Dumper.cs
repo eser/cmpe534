@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Parsing;
 
@@ -13,41 +14,54 @@ namespace Deduction.Proposition.Processors
             this.registry = registry;
         }
 
-        public string Dump(IMember input)
+        public string Dump(params IMember[] input)
+        {
+            return this.Dump(input as IEnumerable<IMember>);
+        }
+
+        public string Dump(IEnumerable<IMember> input)
         {
             StringBuilder output = new StringBuilder();
 
-            if (input is Symbol)
+            foreach (IMember inputItem in input)
             {
-                output.Append((input as Symbol).Letter);
-            }
-            else if (input is Connective)
-            {
-                Connective connective = (input as Connective);
-                RegistryMember registryMember = registry.GetMemberByType(connective.GetType());
-
-                if (connective.ParameterCount == 1)
+                if (output.Length > 0)
                 {
-                    output.Append(registryMember.SymbolChar);
-                    output.Append("(");
-                    output.Append(this.Dump(connective.Parameters[0]));
-                    output.Append(")");
+                    output.Append(", ");
                 }
-                else
-                {
-                    output.Append("(");
-                    for (int i = 0; i < connective.ParameterCount; i++)
-                    {
-                        if (i != 0)
-                        {
-                            output.Append(" ");
-                            output.Append(registryMember.SymbolChar);
-                            output.Append(" ");
-                        }
 
-                        output.Append(this.Dump(connective.Parameters[i]));
+                if (inputItem is Symbol)
+                {
+                    output.Append((inputItem as Symbol).Letter);
+                }
+                else if (inputItem is Connective)
+                {
+                    Connective connective = (inputItem as Connective);
+                    RegistryMember registryMember = registry.GetMemberByType(connective.GetType());
+
+                    if (connective.ParameterCount == 1)
+                    {
+                        output.Append(registryMember.SymbolChar);
+                        output.Append("(");
+                        output.Append(this.Dump(connective.Parameters[0]));
+                        output.Append(")");
                     }
-                    output.Append(")");
+                    else
+                    {
+                        output.Append("(");
+                        for (int i = 0; i < connective.ParameterCount; i++)
+                        {
+                            if (i != 0)
+                            {
+                                output.Append(" ");
+                                output.Append(registryMember.SymbolChar);
+                                output.Append(" ");
+                            }
+
+                            output.Append(this.Dump(connective.Parameters[i]));
+                        }
+                        output.Append(")");
+                    }
                 }
             }
 

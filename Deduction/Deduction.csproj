@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GentzenPrime\Sequent.cs" />
     <Compile Include="GentzenPrime\Tree.cs" />
     <Compile Include="Proposition\Abstraction\Connective.cs" />
     <Compile Include="Proposition\Parsing\Parser.cs">
@@ -64,6 +65,8 @@
     <Compile Include="Proposition\Processors\Simplifier.cs" />
     <Compile Include="Proposition\Processors\Substitutor.cs" />
     <Compile Include="Proposition\Processors\Dumper.cs" />
+    <Compile Include="Tests\ConsoleOut\SequentTests.cs" />
+    <Compile Include="Tests\ConsoleOut\PropositionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
