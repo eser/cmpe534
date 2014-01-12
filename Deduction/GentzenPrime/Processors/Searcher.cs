@@ -21,7 +21,7 @@ namespace Deduction.GentzenPrime.Processors
             // consider right side as true if it's empty.
         }
 
-        public List<Sequent> Expand(Sequent sequent)
+        public void Expand(Tree<Sequent> sequentNode)
         {
             List<Sequent> expanded = new List<Sequent>();
             expanded.Add(new Sequent());
@@ -30,7 +30,7 @@ namespace Deduction.GentzenPrime.Processors
 
             bool skip = false;
             #region apply left rule
-            foreach (IMember leftMember in sequent.Left)
+            foreach (IMember leftMember in sequentNode.Content.Left)
             {
                 if (!skip)
                 {
@@ -38,13 +38,13 @@ namespace Deduction.GentzenPrime.Processors
 
                     if (leftMemberApplied != null)
                     {
+                        while (expanded.Count < leftMemberApplied.Length)
+                        {
+                            expanded.Add(expanded[0].Clone() as Sequent);
+                        }
+
                         for (int i = 0; i < leftMemberApplied.Length; i++)
                         {
-                            if (expanded.Count <= i)
-                            {
-                                expanded.Add(expanded[i - 1].Clone() as Sequent);
-                            }
-
                             expanded[i].PrependToLeft(leftMemberApplied[i]);
                         }
 
@@ -61,7 +61,7 @@ namespace Deduction.GentzenPrime.Processors
             #endregion
 
             #region apply right rule
-            foreach (IMember rightMember in sequent.Right)
+            foreach (IMember rightMember in sequentNode.Content.Right)
             {
                 if (!skip)
                 {
@@ -69,13 +69,13 @@ namespace Deduction.GentzenPrime.Processors
 
                     if (rightMemberApplied != null)
                     {
+                        while (expanded.Count < rightMemberApplied.Length)
+                        {
+                            expanded.Add(expanded[0].Clone() as Sequent);
+                        }
+
                         for (int i = 0; i < rightMemberApplied.Length; i++)
                         {
-                            if (expanded.Count <= i)
-                            {
-                                expanded.Add(expanded[i - 1].Clone() as Sequent);
-                            }
-
                             expanded[i].PrependToRight(rightMemberApplied[i]);
                         }
 
@@ -91,7 +91,13 @@ namespace Deduction.GentzenPrime.Processors
             }
             #endregion
 
-            return expanded;
+            if (skip)
+            {
+                foreach (Sequent expandedSequent in expanded)
+                {
+                    sequentNode.AddChild(expandedSequent);
+                }
+            }
         }
 
         public IMember[][] ApplyLeftRule(IMember member)
@@ -102,11 +108,23 @@ namespace Deduction.GentzenPrime.Processors
                 return new IMember[][] { new IMember[] { and.Parameters[0], and.Parameters[1] } };
             }
 
+            if (member is Or)
+            {
+                Or or = member as Or;
+                return new IMember[][] { new IMember[] { or.Parameters[0] }, new IMember[] { or.Parameters[1] } };
+            }
+
             return null;
         }
 
         public IMember[][] ApplyRightRule(IMember member)
         {
+            if (member is And)
+            {
+                And and = member as And;
+                return new IMember[][] { new IMember[] { and.Parameters[0] }, new IMember[] { and.Parameters[1] } };
+            } 
+
             if (member is Or)
             {
                 Or or = member as Or;

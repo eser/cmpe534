@@ -19,22 +19,31 @@ namespace Deduction.Tests.ConsoleOut
                 return;
             }
 
+            Tree<Sequent> root = new Tree<Sequent>(sequent);
+
             Searcher searcher = new Searcher(registry);
-            List<Sequent> sequents = searcher.Expand(sequent);
+            searcher.Expand(root);
 
             Dumper dumper = new Dumper(registry);
-            output.WriteLine("sequent                   = {0} -> {1}", dumper.Dump(sequent.Left), dumper.Dump(sequent.Right));
-            output.WriteLine("sequent.isAxiom()         = {0}", sequent.IsAxiom());
-            output.WriteLine("sequent.isAtomic()        = {0}", sequent.IsAtomic());
-            output.WriteLine();
+            //output.WriteLine("sequent                   = {0} -> {1}", dumper.Dump(sequent.Left), dumper.Dump(sequent.Right));
+            //output.WriteLine("sequent.isAxiom()         = {0}", sequent.IsAxiom());
+            //output.WriteLine("sequent.isAtomic()        = {0}", sequent.IsAtomic());
+            //output.WriteLine();
 
-            for (int i = 0; i < sequents.Count; i++)
-            {
-                output.WriteLine("sequent #{0}                = {1} -> {2}", i + 1, dumper.Dump(sequents[i].Left), dumper.Dump(sequents[i].Right));
-                output.WriteLine("sequent #{0}.isAxiom()      = {1}", i + 1, sequents[i].IsAxiom());
-                output.WriteLine("sequent #{0}.isAtomic()     = {1}", i + 1, sequents[i].IsAtomic());
-                output.WriteLine();
-            }
+            int i = 0;
+            root.Traverse(
+                delegate(Sequent seq, int depth)
+                {
+                    string indentation = new string('\t', depth);
+
+                    output.WriteLine("{0}sequent #{1}                = {2} -> {3}", indentation, i + 1, dumper.Dump(seq.Left), dumper.Dump(seq.Right));
+                    output.WriteLine("{0}sequent #{1}.isAxiom()      = {2}", indentation, i + 1, seq.IsAxiom());
+                    output.WriteLine("{0}sequent #{1}.isAtomic()     = {2}", indentation, i + 1, seq.IsAtomic());
+                    output.WriteLine();
+
+                    i++;
+                }
+            );
         }
     }
 }

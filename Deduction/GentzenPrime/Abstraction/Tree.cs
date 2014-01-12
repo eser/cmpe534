@@ -69,12 +69,12 @@ namespace Deduction.GentzenPrime.Abstraction
             this.children.AddLast(new Tree<T>(content, this));
         }
 
-        public void Traverse(Action<T> action)
+        public void Traverse(Action<T, int> action, int depth = 0)
         {
-            action(this.Content);
+            action(this.Content, depth);
             foreach (Tree<T> child in this.Children)
             {
-                child.Traverse(action);
+                child.Traverse(action, depth + 1);
             }
         }
 
