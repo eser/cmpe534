@@ -38,7 +38,7 @@ namespace Deduction.Proposition.Members
                 firstParameterSymbol = registry.GetMemberBySymbolChar(firstParameter.Letter);
                 if (firstParameterSymbol != null && firstParameterSymbol.Value == true)
                 {
-                    return new Symbol("t");
+                    return new Constant("t", true);
                 }
             }
 
@@ -49,7 +49,7 @@ namespace Deduction.Proposition.Members
                 secondParameterSymbol = registry.GetMemberBySymbolChar(secondParameter.Letter);
                 if (secondParameterSymbol != null && secondParameterSymbol.Value == true)
                 {
-                    return new Symbol("t");
+                    return new Constant("t", true);
                 }
             }
 

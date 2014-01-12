@@ -36,11 +36,34 @@ namespace Deduction.GentzenPrime.Abstraction
 
         public bool IsAxiom()
         {
-            foreach (IMember leftMember in this.Left)
+            if (this.Left.Count > 0)
+            {
+                foreach (IMember leftMember in this.Left)
+                {
+                    if (leftMember is Constant && (leftMember as Constant).Value == false)
+                    {
+                        return true;
+                    }
+
+                    foreach (IMember rightMember in this.Right)
+                    {
+                        if (rightMember is Constant && (rightMember as Constant).Value == true)
+                        {
+                            return true;
+                        }
+
+                        if (leftMember.Equals(rightMember))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            else
             {
                 foreach (IMember rightMember in this.Right)
                 {
-                    if (leftMember.Equals(rightMember))
+                    if (rightMember is Constant && (rightMember as Constant).Value == true)
                     {
                         return true;
                     }

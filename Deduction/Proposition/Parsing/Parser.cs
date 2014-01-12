@@ -96,6 +96,11 @@ namespace Deduction.Proposition.Parsing
 
                     this.connectives.Pop();
                 }
+                else if (curr.RegistryMember != null && typeof(Constant).IsAssignableFrom(curr.RegistryMember.Type))
+                {
+                    Constant constant = new Constant(curr.Content, curr.RegistryMember.Value.Value);
+                    this.members.Push(constant);
+                }
                 else
                 {
                     Symbol symbol = new Symbol(curr.Content);

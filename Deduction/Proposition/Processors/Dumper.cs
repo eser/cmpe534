@@ -42,9 +42,18 @@ namespace Deduction.Proposition.Processors
                     if (connective.ParameterCount == 1)
                     {
                         output.Append(registryMember.SymbolChar);
-                        output.Append("(");
+
+                        if (!connective.Parameters[0].IsAtomic)
+                        {
+                            output.Append("(");
+                        }
+
                         output.Append(this.Dump(connective.Parameters[0]));
-                        output.Append(")");
+
+                        if (!connective.Parameters[0].IsAtomic)
+                        {
+                            output.Append(")");
+                        }
                     }
                     else
                     {

@@ -50,6 +50,7 @@
     <Compile Include="GentzenPrime\Processors\SequentReader.cs" />
     <Compile Include="GentzenPrime\Processors\Searcher.cs" />
     <Compile Include="Proposition\Abstraction\Connective.cs" />
+    <Compile Include="Proposition\Abstraction\Constant.cs" />
     <Compile Include="Proposition\Parsing\Parser.cs">
       <SubType>Code</SubType>
     </Compile>

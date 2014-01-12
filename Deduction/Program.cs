@@ -21,8 +21,8 @@ namespace Deduction
                 new RegistryMember("[", typeof(Parenthesis), precedence: 101, closesWith: "]"),
                 new RegistryMember("(", typeof(Parenthesis), precedence: 101, closesWith: ")"),
 
-                new RegistryMember("f", typeof(Symbol), precedence: 0, value: false, aliases: new string[] { "0", "false" }),
-                new RegistryMember("t", typeof(Symbol), precedence: 0, value: true, aliases: new string[] { "1", "true" })
+                new RegistryMember("f", typeof(Constant), precedence: 0, value: false, aliases: new string[] { "0", "false" }),
+                new RegistryMember("t", typeof(Constant), precedence: 0, value: true, aliases: new string[] { "1", "true" })
             );
 
             // proposition tests including parsing, valuation, simplification.
@@ -32,7 +32,7 @@ namespace Deduction
 
             // sequent tests including parsing
             // string sequent = "A, (First | Second) & (A | B) & C -> A, B, C";
-            string sequent = "B | C, D | E -> A & B, C | D";
+            string sequent = "A = B ->";
             SequentTests.Test(Console.Out, registry, sequent);
 
             Console.Read();

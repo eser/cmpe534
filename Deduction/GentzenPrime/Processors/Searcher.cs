@@ -106,7 +106,12 @@ namespace Deduction.GentzenPrime.Processors
         {
             foreach (IMember member in members)
             {
-                if (member is And)
+                if (member is Not)
+                {
+                    Not not = member as Not;
+                    operations.Insert(0, new RuleOperation(BranchDistribution.Both, SequentDirection.Right, not.Parameters[0], true));
+                }
+                else if (member is And)
                 {
                     And and = member as And;
                     operations.InsertRange(0,
@@ -125,6 +130,25 @@ namespace Deduction.GentzenPrime.Processors
 
                     branched = true;
                 }
+                else if (!branched && member is Implication)
+                {
+                    Implication implication = member as Implication;
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToLeft, SequentDirection.Right, implication.Parameters[0], true));
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToRight, SequentDirection.Left, implication.Parameters[1], true));
+
+                    branched = true;
+                }
+                else if (member is Equivalence)
+                {
+                    Equivalence equivalence = member as Equivalence;
+                    operations.InsertRange(0,
+                        new RuleOperation[]
+                        {
+                            new RuleOperation(BranchDistribution.Both, SequentDirection.Left, new Implication(equivalence.Parameters[0], equivalence.Parameters[1]), true),
+                            new RuleOperation(BranchDistribution.Both, SequentDirection.Left, new Implication(equivalence.Parameters[1], equivalence.Parameters[0]), true)
+                        }
+                    );
+                }
                 else
                 {
                     operations.Add(new RuleOperation(BranchDistribution.Both, SequentDirection.Left, member, false));
@@ -136,7 +160,12 @@ namespace Deduction.GentzenPrime.Processors
         {
             foreach (IMember member in members)
             {
-                if (!branched && member is And)
+                if (member is Not)
+                {
+                    Not not = member as Not;
+                    operations.Insert(0, new RuleOperation(BranchDistribution.Both, SequentDirection.Left, not.Parameters[0], true));
+                }
+                else if (!branched && member is And)
                 {
                     And and = member as And;
                     operations.Insert(0, new RuleOperation(BranchDistribution.ToLeft, SequentDirection.Right, and.Parameters[0], true));
@@ -154,6 +183,20 @@ namespace Deduction.GentzenPrime.Processors
                             new RuleOperation(BranchDistribution.Both, SequentDirection.Right, or.Parameters[1], true)
                         }
                     );
+                }
+                else if (member is Implication)
+                {
+                    Implication implication = member as Implication;
+                    operations.Insert(0, new RuleOperation(BranchDistribution.Both, SequentDirection.Left, implication.Parameters[0], true));
+                    operations.Insert(0, new RuleOperation(BranchDistribution.Both, SequentDirection.Right, implication.Parameters[1], true));
+                }
+                else if (!branched && member is Equivalence)
+                {
+                    Equivalence equivalence = member as Equivalence;
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToLeft, SequentDirection.Right, new Implication(equivalence.Parameters[0], equivalence.Parameters[1]), true));
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToRight, SequentDirection.Right, new Implication(equivalence.Parameters[1], equivalence.Parameters[0]), true));
+
+                    branched = true;
                 }
                 else
                 {
