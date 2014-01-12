@@ -32,7 +32,7 @@ namespace Deduction
 
             // sequent tests including parsing
             // string sequent = "A, (First | Second) & (A | B) & C -> A, B, C";
-            string sequent = "A, B | C -> A | B, C";
+            string sequent = "B | C -> A & B, C";
             SequentTests.Test(Console.Out, registry, sequent);
 
             Console.Read();

@@ -71,15 +71,40 @@ namespace Deduction.GentzenPrime.Abstraction
             return true;
         }
 
-        public void PrependToLeft(params IMember[] member)
-        {
-            this.Left.InsertRange(0, member);
-        }
+        //public void DoOperation(RuleOperation ruleOperation)
+        //{
+        //    this.DoOperation(ruleOperation.SequentDirection, ruleOperation.SequentOperation, ruleOperation.Member);
+        //}
 
-        public void PrependToRight(params IMember[] member)
-        {
-            this.Right.InsertRange(0, member);
-        }
+        //public void DoOperation(SequentDirection sequentDirection, SequentOperation sequentOperation, IMember member)
+        //{
+        //    if (sequentDirection == SequentDirection.Left)
+        //    {
+        //        switch (sequentOperation)
+        //        {
+        //            case SequentOperation.Append:
+        //                this.Left.Add(member);
+        //                break;
+
+        //            case SequentOperation.Prepend:
+        //                this.Left.Insert(0, member);
+        //                break;
+        //        }
+        //    }
+        //    else if (sequentDirection == SequentDirection.Right)
+        //    {
+        //        switch (sequentOperation)
+        //        {
+        //            case SequentOperation.Append:
+        //                this.Right.Add(member);
+        //                break;
+
+        //            case SequentOperation.Prepend:
+        //                this.Right.Insert(0, member);
+        //                break;
+        //        }
+        //    }
+        //}
 
         public object Clone()
         {

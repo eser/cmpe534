@@ -23,115 +23,118 @@ namespace Deduction.GentzenPrime.Processors
 
         public void Expand(Tree<Sequent> sequentNode)
         {
-            List<Sequent> expanded = new List<Sequent>();
-            expanded.Add(new Sequent());
+            List<RuleOperation> ruleOperations = new List<RuleOperation>();
 
-            // replace with tree
+            this.ScanForLeftRules(ref ruleOperations, sequentNode.Content.Left);
+            this.ScanForRightRules(ref ruleOperations, sequentNode.Content.Right);
 
-            bool skip = false;
-            #region apply left rule
-            foreach (IMember leftMember in sequentNode.Content.Left)
+            Sequent leftBranch = new Sequent();
+            Sequent rightBranch = new Sequent();
+            int modifiedMembers = 0;
+            int branchDiffs = 0;
+
+            foreach (RuleOperation ruleOperation in ruleOperations)
             {
-                if (!skip)
+                if (ruleOperation.IsModified)
                 {
-                    IMember[][] leftMemberApplied = this.ApplyLeftRule(leftMember);
+                    modifiedMembers++;
 
-                    if (leftMemberApplied != null)
+                    if (ruleOperation.BranchDistribution != BranchDistribution.Both)
                     {
-                        while (expanded.Count < leftMemberApplied.Length)
-                        {
-                            expanded.Add(expanded[0].Clone() as Sequent);
-                        }
-
-                        for (int i = 0; i < leftMemberApplied.Length; i++)
-                        {
-                            expanded[i].PrependToLeft(leftMemberApplied[i]);
-                        }
-
-                        skip = true;
-                        continue;
+                        branchDiffs++;
                     }
                 }
 
-                foreach (Sequent expandedSequent in expanded)
+                if (ruleOperation.BranchDistribution == BranchDistribution.Both || ruleOperation.BranchDistribution == BranchDistribution.ToLeft)
                 {
-                    expandedSequent.Left.Add(leftMember);
-                }
-            }
-            #endregion
-
-            #region apply right rule
-            foreach (IMember rightMember in sequentNode.Content.Right)
-            {
-                if (!skip)
-                {
-                    IMember[][] rightMemberApplied = this.ApplyRightRule(rightMember);
-
-                    if (rightMemberApplied != null)
+                    if (ruleOperation.SequentDirection == SequentDirection.Left)
                     {
-                        while (expanded.Count < rightMemberApplied.Length)
-                        {
-                            expanded.Add(expanded[0].Clone() as Sequent);
-                        }
-
-                        for (int i = 0; i < rightMemberApplied.Length; i++)
-                        {
-                            expanded[i].PrependToRight(rightMemberApplied[i]);
-                        }
-
-                        skip = true;
-                        continue;
+                        leftBranch.Left.Add(ruleOperation.Member);
+                    }
+                    else
+                    {
+                        leftBranch.Right.Add(ruleOperation.Member);
                     }
                 }
 
-                foreach (Sequent expandedSequent in expanded)
+                if (ruleOperation.BranchDistribution == BranchDistribution.Both || ruleOperation.BranchDistribution == BranchDistribution.ToRight)
                 {
-                    expandedSequent.Right.Add(rightMember);
+                    if (ruleOperation.SequentDirection == SequentDirection.Left)
+                    {
+                        rightBranch.Left.Add(ruleOperation.Member);
+                    }
+                    else
+                    {
+                        rightBranch.Right.Add(ruleOperation.Member);
+                    }
                 }
             }
-            #endregion
 
-            if (skip)
+            if (modifiedMembers > 0)
             {
-                foreach (Sequent expandedSequent in expanded)
+                sequentNode.AddChild(leftBranch);
+
+                if (branchDiffs > 0)
                 {
-                    sequentNode.AddChild(expandedSequent);
+                    sequentNode.AddChild(rightBranch);
                 }
             }
         }
 
-        public IMember[][] ApplyLeftRule(IMember member)
+        protected void ScanForLeftRules(ref List<RuleOperation> operations, List<IMember> members)
         {
-            if (member is And)
+            foreach (IMember member in members)
             {
-                And and = member as And;
-                return new IMember[][] { new IMember[] { and.Parameters[0], and.Parameters[1] } };
+                if (member is And)
+                {
+                    And and = member as And;
+                    operations.InsertRange(0,
+                        new RuleOperation[]
+                        {
+                            new RuleOperation(BranchDistribution.Both, SequentDirection.Left, and.Parameters[0], true),
+                            new RuleOperation(BranchDistribution.Both, SequentDirection.Left, and.Parameters[1], true)
+                        }
+                    );
+                }
+                else if (member is Or)
+                {
+                    Or or = member as Or;
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToLeft, SequentDirection.Left, or.Parameters[0], true));
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToRight, SequentDirection.Left, or.Parameters[1], true));
+                }
+                else
+                {
+                    operations.Add(new RuleOperation(BranchDistribution.Both, SequentDirection.Left, member, false));
+                }
             }
-
-            if (member is Or)
-            {
-                Or or = member as Or;
-                return new IMember[][] { new IMember[] { or.Parameters[0] }, new IMember[] { or.Parameters[1] } };
-            }
-
-            return null;
         }
 
-        public IMember[][] ApplyRightRule(IMember member)
+        protected void ScanForRightRules(ref List<RuleOperation> operations, List<IMember> members)
         {
-            if (member is And)
+            foreach (IMember member in members)
             {
-                And and = member as And;
-                return new IMember[][] { new IMember[] { and.Parameters[0] }, new IMember[] { and.Parameters[1] } };
-            } 
-
-            if (member is Or)
-            {
-                Or or = member as Or;
-                return new IMember[][] { new IMember[] { or.Parameters[0], or.Parameters[1] } };
+                if (member is And)
+                {
+                    And and = member as And;
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToLeft, SequentDirection.Right, and.Parameters[0], true));
+                    operations.Insert(0, new RuleOperation(BranchDistribution.ToRight, SequentDirection.Right, and.Parameters[1], true));
+                }
+                else if (member is Or)
+                {
+                    Or or = member as Or;
+                    operations.InsertRange(0,
+                        new RuleOperation[]
+                        {
+                            new RuleOperation(BranchDistribution.Both, SequentDirection.Right, or.Parameters[0], true),
+                            new RuleOperation(BranchDistribution.Both, SequentDirection.Right, or.Parameters[1], true)
+                        }
+                    );
+                }
+                else
+                {
+                    operations.Add(new RuleOperation(BranchDistribution.Both, SequentDirection.Right, member, false));
+                }
             }
-
-            return null;
         }
     }
 }
