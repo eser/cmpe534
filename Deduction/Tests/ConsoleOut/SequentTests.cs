@@ -22,7 +22,7 @@ namespace Deduction.Tests.ConsoleOut
             Tree<Sequent> root = new Tree<Sequent>(sequent);
 
             Searcher searcher = new Searcher(registry);
-            searcher.Expand(root);
+            searcher.Search(root);
 
             Dumper dumper = new Dumper(registry);
             //output.WriteLine("sequent                   = {0} -> {1}", dumper.Dump(sequent.Left), dumper.Dump(sequent.Right));

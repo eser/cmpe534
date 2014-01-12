@@ -15,18 +15,39 @@ namespace Deduction.GentzenPrime.Processors
             this.registry = registry;
         }
 
-        public void Search(Sequent sequent, Tree<Sequent> tree)
+        public void Search(Tree<Sequent> tree)
         {
             // consider left side as true if it's empty,
             // consider right side as true if it's empty.
+
+            Queue<Tree<Sequent>> queue = new Queue<Tree<Sequent>>();
+            queue.Enqueue(tree);
+
+            while (queue.Count > 0)
+            {
+                Tree<Sequent> current = queue.Dequeue();
+
+                if (current.Content.IsAxiom())
+                {
+                    continue;
+                }
+
+                this.Expand(current);
+
+                foreach (Tree<Sequent> node in current.Children)
+                {
+                    queue.Enqueue(node);
+                }
+            }
         }
 
         public void Expand(Tree<Sequent> sequentNode)
         {
             List<RuleOperation> ruleOperations = new List<RuleOperation>();
+            bool branched = false;
 
-            this.ScanForLeftRules(ref ruleOperations, sequentNode.Content.Left);
-            this.ScanForRightRules(ref ruleOperations, sequentNode.Content.Right);
+            this.ScanForLeftRules(ref ruleOperations, ref branched, sequentNode.Content.Left);
+            this.ScanForRightRules(ref ruleOperations, ref branched, sequentNode.Content.Right);
 
             Sequent leftBranch = new Sequent();
             Sequent rightBranch = new Sequent();
@@ -81,7 +102,7 @@ namespace Deduction.GentzenPrime.Processors
             }
         }
 
-        protected void ScanForLeftRules(ref List<RuleOperation> operations, List<IMember> members)
+        protected void ScanForLeftRules(ref List<RuleOperation> operations, ref bool branched, List<IMember> members)
         {
             foreach (IMember member in members)
             {
@@ -96,11 +117,13 @@ namespace Deduction.GentzenPrime.Processors
                         }
                     );
                 }
-                else if (member is Or)
+                else if (!branched && member is Or)
                 {
                     Or or = member as Or;
                     operations.Insert(0, new RuleOperation(BranchDistribution.ToLeft, SequentDirection.Left, or.Parameters[0], true));
                     operations.Insert(0, new RuleOperation(BranchDistribution.ToRight, SequentDirection.Left, or.Parameters[1], true));
+
+                    branched = true;
                 }
                 else
                 {
@@ -109,15 +132,17 @@ namespace Deduction.GentzenPrime.Processors
             }
         }
 
-        protected void ScanForRightRules(ref List<RuleOperation> operations, List<IMember> members)
+        protected void ScanForRightRules(ref List<RuleOperation> operations, ref bool branched, List<IMember> members)
         {
             foreach (IMember member in members)
             {
-                if (member is And)
+                if (!branched && member is And)
                 {
                     And and = member as And;
                     operations.Insert(0, new RuleOperation(BranchDistribution.ToLeft, SequentDirection.Right, and.Parameters[0], true));
                     operations.Insert(0, new RuleOperation(BranchDistribution.ToRight, SequentDirection.Right, and.Parameters[1], true));
+
+                    branched = true;
                 }
                 else if (member is Or)
                 {
