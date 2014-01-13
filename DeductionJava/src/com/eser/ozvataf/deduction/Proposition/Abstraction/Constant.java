@@ -1,7 +1,6 @@
 package com.eser.ozvataf.deduction.Proposition.Abstraction;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 
 /**
  * Created with IntelliJ IDEA.
