@@ -8,14 +8,6 @@ namespace Deduction.Proposition.Abstraction
     {
         protected readonly List<IMember> parameters;
 
-        public List<IMember> Parameters
-        {
-            get
-            {
-                return this.parameters;
-            }
-        }
-
         public Connective(params IMember[] parameters)
         {
             this.parameters = new List<IMember>(parameters);
@@ -24,6 +16,14 @@ namespace Deduction.Proposition.Abstraction
         public Connective(IEnumerable<IMember> parameters)
         {
             this.parameters = new List<IMember>(parameters);
+        }
+
+        public List<IMember> Parameters
+        {
+            get
+            {
+                return this.parameters;
+            }
         }
 
         public bool IsAtomic

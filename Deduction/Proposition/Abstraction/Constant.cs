@@ -6,17 +6,17 @@ namespace Deduction.Proposition.Abstraction
     {
         protected readonly bool value;
 
+        public Constant(string letter, bool value) : base(letter)
+        {
+            this.value = value;
+        }
+
         public bool Value
         {
             get
             {
                 return this.value;
             }
-        }
-
-        public Constant(string letter, bool value) : base(letter)
-        {
-            this.value = value;
         }
 
         public override bool Equals(object obj)

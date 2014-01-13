@@ -21,6 +21,7 @@ namespace Deduction.Proposition.Abstraction
                 return 0;
             }
         }
+
         public override bool Operation(bool[] values)
         {
             return false;

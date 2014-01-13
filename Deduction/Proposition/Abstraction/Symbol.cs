@@ -6,17 +6,17 @@ namespace Deduction.Proposition.Abstraction
     {
         protected readonly string letter;
 
+        public Symbol(string letter)
+        {
+            this.letter = letter;
+        }
+
         public string Letter
         {
             get
             {
                 return this.letter;
             }
-        }
-
-        public Symbol(string letter)
-        {
-            this.letter = letter;
         }
 
         public bool IsAtomic
