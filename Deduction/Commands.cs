@@ -75,11 +75,19 @@ namespace Deduction
                         {
                             Console.Clear();
                         }
+                        else
+                        {
+                            for (int i = 25; i >= 0; i--)
+                            {
+                                this.textWriter.WriteLine();
+                            }
+                        }
+                        this.Help();
                         break;
 
                     default:
                         this.textWriter.WriteLine("Invalid input, type 'h' for help.");
-                        this.textWriter.WriteLine("Hint: to prove a propositional formula, use '? [sequent]' command.");
+                        this.textWriter.WriteLine("Hint: to prove a propositional formula, use '? {0}' command.", line);
                         this.textWriter.WriteLine();
                         break;
                 }
@@ -106,14 +114,24 @@ namespace Deduction
         {
             if (!File.Exists(path))
             {
-                this.textWriter.WriteLine("File not found - " + path);
+                this.textWriter.WriteLine("File not found - {0}", path);
                 this.textWriter.WriteLine();
                 return;
             }
 
+            this.textWriter.WriteLine("Reading file: {0}", path);
+            this.textWriter.WriteLine();
+
             string[] lines = File.ReadAllLines(path);
             foreach (string line in lines)
             {
+                string trimmedLine = line.Trim();
+                if (trimmedLine.Length == 0 || trimmedLine.StartsWith("//") || trimmedLine.StartsWith("#"))
+                {
+                    continue;
+                }
+
+                this.textWriter.WriteLine("-------------------------------------------------");
                 this.LoadFromInputProof(line);
             }
         }

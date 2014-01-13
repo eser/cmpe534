@@ -1,0 +1,7 @@
+((!Q & P) & (P > Q) & (T > S) & (R and S)) > T
+(((Q & P) & ((P > Q) & ((T > S) & (R | S)))) > T)
+A | !A
+A & !A
+(A implies B) & (B > A)
+A = B
+// A equals B
