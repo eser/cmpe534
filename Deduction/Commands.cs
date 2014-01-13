@@ -40,23 +40,34 @@ namespace Deduction
                     case ".":
                         if (words.Length < 2)
                         {
-                            this.textWriter.WriteLine("Required parameter is missing, see help.");
+                            this.textWriter.WriteLine("Required parameter is missing, type 'h' for help.");
                             this.textWriter.WriteLine();
                             break;
                         }
 
-                        this.LoadFromFile(words[1]);
+                        this.LoadFromFileProof(words[1]);
                         break;
 
                     case "?":
                         if (words.Length < 2)
                         {
-                            this.textWriter.WriteLine("Required parameter is missing, see help.");
+                            this.textWriter.WriteLine("Required parameter is missing, type 'h' for help.");
                             this.textWriter.WriteLine();
                             break;
                         }
 
-                        this.LoadFromInput(words[1]);
+                        this.LoadFromInputProof(words[1]);
+                        break;
+
+                    case "f":
+                        if (words.Length < 2)
+                        {
+                            this.textWriter.WriteLine("Required parameter is missing, type 'h' for help.");
+                            this.textWriter.WriteLine();
+                            break;
+                        }
+
+                        this.LoadFromInputFalsify(words[1]);
                         break;
 
                     case "c":
@@ -67,7 +78,8 @@ namespace Deduction
                         break;
 
                     default:
-                        this.textWriter.WriteLine("Invalid input, see help.");
+                        this.textWriter.WriteLine("Invalid input, type 'h' for help.");
+                        this.textWriter.WriteLine("Hint: to prove a propositional formula, use '? [sequent]' command.");
                         this.textWriter.WriteLine();
                         break;
                 }
@@ -81,7 +93,8 @@ namespace Deduction
             this.textWriter.WriteLine("Help");
             this.textWriter.WriteLine("==================");
             this.textWriter.WriteLine();
-            this.textWriter.WriteLine("? [sequent]     to load a sequent from input.");
+            this.textWriter.WriteLine("? [sequent]     to load a sequent from input and show proof tree.");
+            this.textWriter.WriteLine("f [sequent]     to load a sequent from input and list all falsifying valuations.");
             this.textWriter.WriteLine(". [path]        to load a sequent from file.");
             this.textWriter.WriteLine("c               to clear console.");
             this.textWriter.WriteLine("h               to help.");
@@ -89,7 +102,7 @@ namespace Deduction
             this.textWriter.WriteLine();
         }
 
-        public void LoadFromFile(string path)
+        public void LoadFromFileProof(string path)
         {
             if (!File.Exists(path))
             {
@@ -101,13 +114,13 @@ namespace Deduction
             string[] lines = File.ReadAllLines(path);
             foreach (string line in lines)
             {
-                this.LoadFromInput(line);
+                this.LoadFromInputProof(line);
             }
         }
 
-        public void LoadFromInput(string sequentLine)
+        public void LoadFromInputProof(string sequentLine)
         {
-            this.textWriter.WriteLine("Sequent: " + sequentLine);
+            this.textWriter.WriteLine("Proof tree of: {0}", sequentLine);
             this.textWriter.WriteLine();
 
             Sequent sequent = SequentReader.Read(this.registry, sequentLine);
@@ -120,8 +133,11 @@ namespace Deduction
 
             Tree<Sequent> root = new Tree<Sequent>(sequent);
 
-            Searcher searcher = new Searcher(registry);
-            searcher.Search(root);
+            Solver solver = new Solver(registry);
+            solver.Search(root);
+
+            Falsifier falsifier = new Falsifier(this.registry);
+            List<KeyValuePair<string, bool>> falsifyingValuations = new List<KeyValuePair<string, bool>>();
 
             Dumper dumper = new Dumper(registry);
 
@@ -147,6 +163,9 @@ namespace Deduction
 
                     this.textWriter.WriteLine("{0}          ** counter-example node **", indentation);
                     this.textWriter.WriteLine();
+
+                    List<KeyValuePair<string, bool>> valuations = falsifier.Falsify(sequent);
+                    falsifier.Merge(ref falsifyingValuations, valuations);
                 }
 
                 if (seq.Children.Count >= 2)
@@ -169,18 +188,51 @@ namespace Deduction
 
             if (counterExamples.Count > 0)
             {
-                this.textWriter.WriteLine("Formula is not valid, falsifying valuations below:");
+                this.textWriter.WriteLine("Formula is not valid, details below.");
+
+                this.textWriter.WriteLine("+ Counter-examples:");
                 foreach (string counterExample in counterExamples)
                 {
-                    this.textWriter.Write(".. ");
+                    this.textWriter.Write("  .. ");
                     this.textWriter.WriteLine(counterExample);
                 }
+                this.textWriter.WriteLine();
+
+                this.textWriter.WriteLine("+ Falsifying valuations:");
+                for (int i = 0; i < falsifyingValuations.Count; i++)
+                {
+                    this.textWriter.WriteLine("  .. Valuation #{0}: {1} -> {2}", i, falsifyingValuations[i].Key, falsifyingValuations[i].Value);
+                }
+                this.textWriter.WriteLine();
             }
             else
             {
                 this.textWriter.WriteLine("Formula is valid.");
             }
 
+            this.textWriter.WriteLine();
+        }
+
+        public void LoadFromInputFalsify(string sequentLine, string indentation = "")
+        {
+            this.textWriter.WriteLine("{0}Falsifying valuations of: {1}", indentation, sequentLine);
+            this.textWriter.WriteLine();
+
+            Sequent sequent = SequentReader.Read(this.registry, sequentLine);
+            if (sequent == null)
+            {
+                this.textWriter.WriteLine("{0}Not a valid sequent. Ex: A & B -> B | C, D", indentation);
+                this.textWriter.WriteLine();
+                return;
+            }
+
+            Falsifier falsifier = new Falsifier(this.registry);
+            List<KeyValuePair<string, bool>> valuations = falsifier.Falsify(sequent);
+
+            for (int i = 0; i < valuations.Count; i++)
+            {
+                this.textWriter.WriteLine("{0}Valuation #{1}: {2} -> {3}", indentation, i, valuations[i].Key, valuations[i].Value);
+            }
             this.textWriter.WriteLine();
         }
     }

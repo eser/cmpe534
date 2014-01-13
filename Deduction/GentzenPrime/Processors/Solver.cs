@@ -6,20 +6,17 @@ using Deduction.Proposition.Parsing;
 
 namespace Deduction.GentzenPrime.Processors
 {
-    public class Searcher
+    public class Solver
     {
         protected readonly Registry registry;
 
-        public Searcher(Registry registry)
+        public Solver(Registry registry)
         {
             this.registry = registry;
         }
 
         public void Search(Tree<Sequent> tree)
         {
-            // consider left side as true if it's empty,
-            // consider right side as true if it's empty.
-
             Queue<Tree<Sequent>> queue = new Queue<Tree<Sequent>>();
             queue.Enqueue(tree);
 

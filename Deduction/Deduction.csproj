@@ -49,7 +49,8 @@
     <Compile Include="GentzenPrime\Abstraction\Tree.cs" />
     <Compile Include="GentzenPrime\Abstraction\RuleOperation.cs" />
     <Compile Include="GentzenPrime\Processors\SequentReader.cs" />
-    <Compile Include="GentzenPrime\Processors\Searcher.cs" />
+    <Compile Include="GentzenPrime\Processors\Falsifier.cs" />
+    <Compile Include="GentzenPrime\Processors\Solver.cs" />
     <Compile Include="Proposition\Abstraction\Connective.cs" />
     <Compile Include="Proposition\Abstraction\Constant.cs" />
     <Compile Include="Proposition\Parsing\Parser.cs">

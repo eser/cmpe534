@@ -51,5 +51,36 @@ namespace Deduction.Proposition.Processors
 
             throw new Exception();
         }
+
+        public void GetSymbols(IMember node, ref List<string> table)
+        {
+            if (node is Connective)
+            {
+                Connective sourceConnective = node as Connective;
+                RegistryMember sourceRegistryMember = this.registry.GetMemberByType(sourceConnective.GetType());
+
+                for (int i = 0; i < sourceConnective.ParameterCount; i++)
+                {
+                    this.GetSymbols(sourceConnective.Parameters[i], ref table);
+                }
+
+                return;
+            }
+
+            if (node is Constant)
+            {
+                return;
+            }
+
+            if (node is Symbol)
+            {
+                Symbol sourceSymbol = node as Symbol;
+
+                if (!table.Contains(sourceSymbol.Letter))
+                {
+                    table.Add(sourceSymbol.Letter);
+                }
+            }
+        }
     }
 }
