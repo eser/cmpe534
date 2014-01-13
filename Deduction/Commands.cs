@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Deduction.GentzenPrime.Abstraction;
 using Deduction.GentzenPrime.Processors;
@@ -37,10 +38,24 @@ namespace Deduction
                         break;
 
                     case "l":
+                        if (words.Length < 2)
+                        {
+                            this.textWriter.WriteLine("Required parameter is missing, see help.");
+                            this.textWriter.WriteLine();
+                            break;
+                        }
+
                         this.LoadFromFile(words[1]);
                         break;
 
                     case "s":
+                        if (words.Length < 2)
+                        {
+                            this.textWriter.WriteLine("Required parameter is missing, see help.");
+                            this.textWriter.WriteLine();
+                            break;
+                        }
+
                         this.LoadFromInput(words[1]);
                         break;
 
@@ -111,15 +126,28 @@ namespace Deduction
             Dumper dumper = new Dumper(registry);
 
             int depth = 0;
+            List<string> counterExamples = new List<string>();
             Action<Tree<Sequent>> dumpAction = null;
             dumpAction = delegate(Tree<Sequent> seq)
             {
                 string indentation = new string('\t', depth);
 
-                this.textWriter.WriteLine("{0}sequent                = {1} -> {2}", indentation, dumper.Dump(seq.Content.Left), dumper.Dump(seq.Content.Right));
-                this.textWriter.WriteLine("{0}sequent.isAxiom()      = {1}", indentation, seq.Content.IsAxiom());
-                this.textWriter.WriteLine("{0}sequent.isAtomic()     = {1}", indentation, seq.Content.IsAtomic());
-                this.textWriter.WriteLine();
+                string output = (dumper.Dump(seq.Content.Left) + " -> " + dumper.Dump(seq.Content.Right)).Trim();
+                this.textWriter.WriteLine("{0}sequent = {1}", indentation, output);
+                //this.textWriter.WriteLine("{0}sequent.isAxiom()      = {1}", indentation, seq.Content.IsAxiom());
+                //this.textWriter.WriteLine("{0}sequent.isAtomic()     = {1}", indentation, seq.Content.IsAtomic());
+                if (seq.Content.IsAxiom())
+                {
+                    this.textWriter.WriteLine("{0}          ** axiom node **", indentation);
+                    this.textWriter.WriteLine();
+                }
+                else if (seq.Content.IsAtomic())
+                {
+                    counterExamples.Add(output);
+
+                    this.textWriter.WriteLine("{0}          ** counter-example node **", indentation);
+                    this.textWriter.WriteLine();
+                }
 
                 if (seq.Children.Count >= 2)
                 {
@@ -139,7 +167,20 @@ namespace Deduction
 
             dumpAction(root);
 
-            this.textWriter.WriteLine("done.");
+            if (counterExamples.Count > 0)
+            {
+                this.textWriter.WriteLine("Formula is not valid, falsifying valuations below:");
+                foreach (string counterExample in counterExamples)
+                {
+                    this.textWriter.Write(".. ");
+                    this.textWriter.WriteLine(counterExample);
+                }
+            }
+            else
+            {
+                this.textWriter.WriteLine("Formula is valid.");
+            }
+
             this.textWriter.WriteLine();
         }
     }
