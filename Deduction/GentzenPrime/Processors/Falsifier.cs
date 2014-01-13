@@ -46,30 +46,29 @@ namespace Deduction.GentzenPrime.Processors
 
             foreach (Dictionary<string, string> valuation in allPossibleValuations)
             {
-                bool found = false;
+                bool leftSide = true;
                 foreach (IMember member in sequent.Left)
                 {
                     IMember resultMember = substitutor.Substitute(member, valuation);
-                    if (resultMember is Constant && !(resultMember as Constant).Value)
+                    if (resultMember is Constant)
                     {
-                        result.Add(valuation);
-                        found = true;
-                        break;
+                        leftSide = leftSide && (resultMember as Constant).Value;
                     }
                 }
 
-                if (!found)
+                bool rightSide = false;
+                foreach (IMember member in sequent.Right)
                 {
-                    foreach (IMember member in sequent.Right)
+                    IMember resultMember = substitutor.Substitute(member, valuation);
+                    if (resultMember is Constant)
                     {
-                        IMember resultMember = substitutor.Substitute(member, valuation);
-                        if (resultMember is Constant && (resultMember as Constant).Value)
-                        {
-                            result.Add(valuation);
-                            found = true;
-                            break;
-                        }
+                        rightSide = rightSide || (resultMember as Constant).Value;
                     }
+                }
+
+                if (leftSide && !rightSide)
+                {
+                    result.Add(valuation);
                 }
             }
 
