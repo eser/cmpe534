@@ -43,7 +43,7 @@ namespace Deduction.Proposition.Abstraction
             return this.letter.GetHashCode();
         }
 
-        public object Clone()
+        public virtual object Clone()
         {
             return Activator.CreateInstance(this.GetType(), this.Letter);
         }

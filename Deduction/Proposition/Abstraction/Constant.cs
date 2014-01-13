@@ -35,7 +35,7 @@ namespace Deduction.Proposition.Abstraction
             return this.value.GetHashCode();
         }
 
-        public object Clone()
+        public override object Clone()
         {
             return Activator.CreateInstance(this.GetType(), this.Letter, this.Value);
         }
