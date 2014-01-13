@@ -43,7 +43,16 @@ namespace Deduction.Proposition.Processors
 
                 if (table.ContainsKey(sourceSymbol.Letter))
                 {
-                    sourceSymbol = Activator.CreateInstance(sourceSymbol.GetType(), table[sourceSymbol.Letter]) as Symbol;
+                    RegistryMember targetRegistryMember = this.registry.GetMemberBySymbolChar(table[sourceSymbol.Letter]);
+
+                    if (targetRegistryMember != null && typeof(Constant).IsAssignableFrom(targetRegistryMember.Type))
+                    {
+                        sourceSymbol = Activator.CreateInstance(targetRegistryMember.Type, targetRegistryMember.SymbolChar, targetRegistryMember.Value) as Constant;
+                    }
+                    else
+                    {
+                        sourceSymbol = Activator.CreateInstance(sourceSymbol.GetType(), table[sourceSymbol.Letter]) as Symbol;
+                    }
                 }
 
                 return sourceSymbol;

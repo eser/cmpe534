@@ -2,7 +2,6 @@
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Members;
 using Deduction.Proposition.Parsing;
-using Deduction.Tests.ConsoleOut;
 
 namespace Deduction
 {

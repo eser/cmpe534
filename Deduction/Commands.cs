@@ -137,7 +137,7 @@ namespace Deduction
             solver.Search(root);
 
             Falsifier falsifier = new Falsifier(this.registry);
-            List<KeyValuePair<string, bool>> falsifyingValuations = new List<KeyValuePair<string, bool>>();
+            List<Dictionary<string, string>> falsifyingValuations = new List<Dictionary<string, string>>();
 
             Dumper dumper = new Dumper(registry);
 
@@ -164,8 +164,11 @@ namespace Deduction
                     this.textWriter.WriteLine("{0}          ** counter-example node **", indentation);
                     this.textWriter.WriteLine();
 
-                    List<KeyValuePair<string, bool>> valuations = falsifier.Falsify(sequent);
-                    falsifier.Merge(ref falsifyingValuations, valuations);
+                    List<Dictionary<string, string>> valuations = falsifier.Falsify(seq.Content);
+                    foreach (Dictionary<string, string> valuation in valuations)
+                    {
+                        falsifyingValuations.Add(valuation);
+                    }
                 }
 
                 if (seq.Children.Count >= 2)
@@ -201,7 +204,11 @@ namespace Deduction
                 this.textWriter.WriteLine("+ Falsifying valuations:");
                 for (int i = 0; i < falsifyingValuations.Count; i++)
                 {
-                    this.textWriter.WriteLine("  .. Valuation #{0}: {1} -> {2}", i, falsifyingValuations[i].Key, falsifyingValuations[i].Value);
+                    this.textWriter.WriteLine("  .. Valuation #{0}:", i + 1);
+                    foreach (KeyValuePair<string, string> valuation in falsifyingValuations[i])
+                    {
+                        this.textWriter.WriteLine("  ..                 {0} -> {1}", valuation.Key, valuation.Value);
+                    }
                 }
                 this.textWriter.WriteLine();
             }
@@ -213,26 +220,37 @@ namespace Deduction
             this.textWriter.WriteLine();
         }
 
-        public void LoadFromInputFalsify(string sequentLine, string indentation = "")
+        public void LoadFromInputFalsify(string sequentLine)
         {
-            this.textWriter.WriteLine("{0}Falsifying valuations of: {1}", indentation, sequentLine);
-            this.textWriter.WriteLine();
-
             Sequent sequent = SequentReader.Read(this.registry, sequentLine);
             if (sequent == null)
             {
-                this.textWriter.WriteLine("{0}Not a valid sequent. Ex: A & B -> B | C, D", indentation);
+                this.textWriter.WriteLine("Not a valid sequent. Ex: A & B -> B | C, D");
                 this.textWriter.WriteLine();
                 return;
             }
 
             Falsifier falsifier = new Falsifier(this.registry);
-            List<KeyValuePair<string, bool>> valuations = falsifier.Falsify(sequent);
+            List<Dictionary<string, string>> valuations = falsifier.Falsify(sequent);
 
-            for (int i = 0; i < valuations.Count; i++)
+            if (valuations.Count > 0)
             {
-                this.textWriter.WriteLine("{0}Valuation #{1}: {2} -> {3}", indentation, i, valuations[i].Key, valuations[i].Value);
+                this.textWriter.WriteLine("Falsifying valuations of: {0}", sequentLine);
+
+                for (int i = 0; i < valuations.Count; i++)
+                {
+                    this.textWriter.WriteLine(".. Valuation #{0}:", i + 1);
+                    foreach (KeyValuePair<string, string> valuation in valuations[i])
+                    {
+                        this.textWriter.WriteLine("..                 {0} -> {1}", valuation.Key, valuation.Value);
+                    }
+                }
             }
+            else
+            {
+                this.textWriter.WriteLine("Falsifying needs atomic input. To prove a sequent use '? {0}' command instead.", sequentLine);
+            }
+
             this.textWriter.WriteLine();
         }
     }

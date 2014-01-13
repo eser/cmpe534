@@ -15,12 +15,13 @@ namespace Deduction.GentzenPrime.Processors
             this.registry = registry;
         }
 
-        public List<KeyValuePair<string, bool>> Falsify(Sequent sequent)
+        public List<Dictionary<string, string>> Falsify(Sequent sequent)
         {
-            List<KeyValuePair<string, bool>> result = new List<KeyValuePair<string, bool>>();
-            List<string> table = new List<string>();
+            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
             Substitutor substitutor = new Substitutor(this.registry);
+            List<string> table = new List<string>();
+
             foreach (IMember member in sequent.Left)
             {
                 substitutor.GetSymbols(member, ref table);
@@ -31,23 +32,27 @@ namespace Deduction.GentzenPrime.Processors
                 substitutor.GetSymbols(member, ref table);
             }
 
-            foreach (string item in table)
+            List<Dictionary<string, string>> allPossibleValuations = new List<Dictionary<string, string>>();
+            for (int i = 0; i < (1 << table.Count); i++)
             {
-                result.Add(new KeyValuePair<string, bool>(item, false));
+                Dictionary<string, string> row = new Dictionary<string, string>();
+                for (int j = 0; j < table.Count; j++)
+                {
+                    row.Add(table[j], (i & (1 << j)) > 0 ? "t" : "f");
+                }
+
+                allPossibleValuations.Add(row);
             }
 
-            return result;
-        }
-
-        public void Merge(ref List<KeyValuePair<string, bool>> original, List<KeyValuePair<string, bool>> valuations2)
-        {
-            bool found = false;
-            foreach (KeyValuePair<string, bool> valuation2 in valuations2)
+            foreach (Dictionary<string, string> valuation in allPossibleValuations)
             {
-                foreach (KeyValuePair<string, bool> valuation1 in original)
+                bool found = false;
+                foreach (IMember member in sequent.Left)
                 {
-                    if (valuation1.Key == valuation2.Key && valuation1.Value == valuation2.Value)
+                    IMember resultMember = substitutor.Substitute(member, valuation);
+                    if (resultMember is Constant && !(resultMember as Constant).Value)
                     {
+                        result.Add(valuation);
                         found = true;
                         break;
                     }
@@ -55,9 +60,20 @@ namespace Deduction.GentzenPrime.Processors
 
                 if (!found)
                 {
-                    original.Add(valuation2);
+                    foreach (IMember member in sequent.Right)
+                    {
+                        IMember resultMember = substitutor.Substitute(member, valuation);
+                        if (resultMember is Constant && (resultMember as Constant).Value)
+                        {
+                            result.Add(valuation);
+                            found = true;
+                            break;
+                        }
+                    }
                 }
             }
+
+            return result;
         }
     }
 }
