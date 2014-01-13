@@ -8,11 +8,11 @@ namespace Deduction.GentzenPrime.Processors
     {
         public static Sequent Read(Registry registry, string prop)
         {
-            string[] propParts = prop.Split(new string[] { Sequent.SEQUENT_SEPERATOR }, StringSplitOptions.None);
+            string[] propParts = prop.Split(new string[] { Sequent.SEQUENT_SEPERATOR }, 2, StringSplitOptions.None);
 
             if (propParts.Length < 2)
             {
-                return null;
+                propParts = new string[] { "", propParts[0] };
             }
 
             Sequent sequent = new Sequent();

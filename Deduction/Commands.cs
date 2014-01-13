@@ -37,7 +37,7 @@ namespace Deduction
                         this.Help();
                         break;
 
-                    case "l":
+                    case ".":
                         if (words.Length < 2)
                         {
                             this.textWriter.WriteLine("Required parameter is missing, see help.");
@@ -48,7 +48,7 @@ namespace Deduction
                         this.LoadFromFile(words[1]);
                         break;
 
-                    case "s":
+                    case "?":
                         if (words.Length < 2)
                         {
                             this.textWriter.WriteLine("Required parameter is missing, see help.");
@@ -81,8 +81,8 @@ namespace Deduction
             this.textWriter.WriteLine("Help");
             this.textWriter.WriteLine("==================");
             this.textWriter.WriteLine();
-            this.textWriter.WriteLine("l [path]        to load a sequent from file.");
-            this.textWriter.WriteLine("s [sequent]     to load a sequent from input.");
+            this.textWriter.WriteLine("? [sequent]     to load a sequent from input.");
+            this.textWriter.WriteLine(". [path]        to load a sequent from file.");
             this.textWriter.WriteLine("c               to clear console.");
             this.textWriter.WriteLine("h               to help.");
             this.textWriter.WriteLine("q               to quit.");
