@@ -8,7 +8,7 @@ namespace Deduction.GentzenPrime.Processors
     {
         public static Sequent Read(Registry registry, string prop)
         {
-            string[] propParts = prop.Split(new string[] { Sequent.SEQUENT_SEPERATOR }, 2, StringSplitOptions.None);
+            string[] propParts = prop.Split(new string[] { Sequent.SEQUENT_SEPARATOR }, 2, StringSplitOptions.None);
 
             if (propParts.Length < 2)
             {
@@ -20,7 +20,7 @@ namespace Deduction.GentzenPrime.Processors
 
             for (int i = 0; i < 2; i++)
             {
-                string[] sequentParts = propParts[i].Split(new string[] { Sequent.ITEM_SEPERATOR }, StringSplitOptions.RemoveEmptyEntries);
+                string[] sequentParts = propParts[i].Split(new string[] { Sequent.ITEM_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (string sequentPart in sequentParts)
                 {

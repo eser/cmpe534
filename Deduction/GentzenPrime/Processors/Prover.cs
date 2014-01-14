@@ -6,11 +6,11 @@ using Deduction.Proposition.Parsing;
 
 namespace Deduction.GentzenPrime.Processors
 {
-    public class Solver
+    public class Prover
     {
         protected readonly Registry registry;
 
-        public Solver(Registry registry)
+        public Prover(Registry registry)
         {
             this.registry = registry;
         }

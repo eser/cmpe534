@@ -6,8 +6,8 @@ namespace Deduction.GentzenPrime.Abstraction
 {
     public class Sequent : ICloneable
     {
-        public const string SEQUENT_SEPERATOR = "->";
-        public const string ITEM_SEPERATOR = ",";
+        public const string SEQUENT_SEPARATOR = "->";
+        public const string ITEM_SEPARATOR = ",";
 
         protected List<IMember> left;
         protected List<IMember> right;

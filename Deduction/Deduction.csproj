@@ -50,7 +50,7 @@
     <Compile Include="GentzenPrime\Abstraction\RuleOperation.cs" />
     <Compile Include="GentzenPrime\Processors\SequentReader.cs" />
     <Compile Include="GentzenPrime\Processors\Falsifier.cs" />
-    <Compile Include="GentzenPrime\Processors\Solver.cs" />
+    <Compile Include="GentzenPrime\Processors\Prover.cs" />
     <Compile Include="Proposition\Abstraction\Connective.cs" />
     <Compile Include="Proposition\Abstraction\Constant.cs" />
     <Compile Include="Proposition\Parsing\Parser.cs">
@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CodeMap.dgml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="prop.txt">

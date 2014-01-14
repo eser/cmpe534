@@ -151,8 +151,8 @@ namespace Deduction
 
             Tree<Sequent> root = new Tree<Sequent>(sequent);
 
-            Solver solver = new Solver(registry);
-            solver.Search(root);
+            Prover prover = new Prover(registry);
+            prover.Search(root);
 
             Falsifier falsifier = new Falsifier(this.registry);
             List<Dictionary<string, string>> falsifyingValuations = new List<Dictionary<string, string>>();
