@@ -6,15 +6,14 @@ This repository contains some practical implementations for CMPE534 Automated De
 
 Project #1: Deduction
 ---------------------
+This project is designed to be a basic interpreter for proving theorems in propositional logic. It is basically accepts propositional statements in a specific syntax in order to prove its validity. For non-valid statements, all falsifying valuations will be extracted from counter-examples.
+
+
 **To-dos:**
 
 * 'Properties' class with 'Distribute' method needed, to resolve inside parenthesis.
 
-* Evaluation needs to cover all connective operations.
-
-* Merge all connective operations with precedence, and do it with BinaryConnectiveBase.Operation()
-
-* NOT simplifications
+* more simplifications
 
 
 **Roadmap:**
@@ -31,33 +30,48 @@ Dumper.Dump()             = (((First | Second) & (A | B)) & C)
 Substitutor.Substitute()  = (((First | First) & (A | t)) & C)
 Simplifier.Simplify()     = ((First & t) & C)
 
-sequent #1                = (B | C), (D | E) -> (A & B), (C | D)
-sequent #1.isAxiom()      = False
-sequent #1.isAtomic()     = False
+Deduction tree of: (B > C) & (D | E) -> (A & B), (C | D)
 
-        sequent #2                = B, (D | E) -> C, D, (A & B)
-        sequent #2.isAxiom()      = False
-        sequent #2.isAtomic()     = False
+sequent = ((B > C) & (D | E)) -> (A & B), (C | D)
+        sequent = (B > C), (D | E) -> C, D, A
+                sequent = (D | E) -> B, C, D, A
+                        sequent = D -> B, C, D, A
+                                  ** axiom node **
 
-                sequent #3                = D, B -> C, D, (A & B)
-                sequent #3.isAxiom()      = True
-                sequent #3.isAtomic()     = False
+                        sequent = E -> B, C, D, A
+                                  ** counter-example node **
 
-                sequent #4                = E, B -> C, D, (A & B)
-                sequent #4.isAxiom()      = False
-                sequent #4.isAtomic()     = False
+                sequent = C, (D | E) -> C, D, A
+                          ** axiom node **
 
-                        sequent #5                = E, B -> A, C, D
-                        sequent #5.isAxiom()      = False
-                        sequent #5.isAtomic()     = True
+        sequent = (B > C), (D | E) -> C, D, B
+                sequent = (D | E) -> B, C, D, B
+                        sequent = D -> B, C, D, B
+                                  ** axiom node **
 
-                        sequent #6                = E, B -> B, C, D
-                        sequent #6.isAxiom()      = True
-                        sequent #6.isAtomic()     = True
+                        sequent = E -> B, C, D, B
+                                  ** counter-example node **
 
-        sequent #7                = C, (D | E) -> C, D, (A & B)
-        sequent #7.isAxiom()      = True
-        sequent #7.isAtomic()     = False
+                sequent = C, (D | E) -> C, D, B
+                          ** axiom node **
+
+Formula is not valid, details below.
++ Counter-examples:
+  .. E -> B, C, D, A
+  .. E -> B, C, D, B
+
++ Falsifying valuations:
+  .. Valuation #1:
+  ..                 E -> t
+  ..                 B -> f
+  ..                 C -> f
+  ..                 D -> f
+  ..                 A -> f
+  .. Valuation #2:
+  ..                 E -> t
+  ..                 B -> f
+  ..                 C -> f
+  ..                 D -> f
 ```
 
 

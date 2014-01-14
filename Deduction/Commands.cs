@@ -138,7 +138,7 @@ namespace Deduction
 
         public void LoadFromInputProof(string sequentLine)
         {
-            this.textWriter.WriteLine("Proof tree of: {0}", sequentLine);
+            this.textWriter.WriteLine("Deduction tree of: {0}", sequentLine);
             this.textWriter.WriteLine();
 
             Sequent sequent = SequentReader.Read(this.registry, sequentLine);
