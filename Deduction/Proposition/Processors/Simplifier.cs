@@ -1,4 +1,6 @@
-﻿using Deduction.Proposition.Abstraction;
+﻿// Proposition/Processors/Simplifier.cs
+
+using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Parsing;
 
 namespace Deduction.Proposition.Processors

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Proposition/Parsing/Registry.cs
+
+using System;
 using System.Collections.Generic;
 
 namespace Deduction.Proposition.Parsing

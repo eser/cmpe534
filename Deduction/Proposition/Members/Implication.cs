@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Proposition/Members/Implication.cs
+
+using System.Collections.Generic;
 using Deduction.Proposition.Abstraction;
 
 namespace Deduction.Proposition.Members

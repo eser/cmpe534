@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Commands.cs
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Deduction.GentzenPrime.Abstraction;

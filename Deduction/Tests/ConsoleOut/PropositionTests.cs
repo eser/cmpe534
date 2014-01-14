@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Tests/ConsoleOut/PropositionTests.cs
+
+using System.Collections.Generic;
 using System.IO;
 using Deduction.Proposition.Parsing;
 using Deduction.Proposition.Processors;

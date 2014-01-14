@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// GentzenPrime/Processors/Falsifier.cs
+
+using System.Collections.Generic;
 using Deduction.GentzenPrime.Abstraction;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Parsing;

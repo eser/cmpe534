@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Program.cs
+
+using System;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Members;
 using Deduction.Proposition.Parsing;

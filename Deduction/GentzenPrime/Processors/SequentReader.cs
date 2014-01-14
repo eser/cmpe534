@@ -1,4 +1,6 @@
-﻿using System;
+﻿// GentzenPrime/Processors/SequentReader.cs
+
+using System;
 using Deduction.GentzenPrime.Abstraction;
 using Deduction.Proposition.Parsing;
 

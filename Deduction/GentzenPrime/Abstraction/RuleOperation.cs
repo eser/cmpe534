@@ -1,4 +1,6 @@
-﻿using Deduction.Proposition.Abstraction;
+﻿// GentzenPrime/Abstraction/RuleOperation.cs
+
+using Deduction.Proposition.Abstraction;
 
 namespace Deduction.GentzenPrime.Abstraction
 {

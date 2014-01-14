@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Proposition/Abstraction/Parenthesis.cs
+
+using System.Collections.Generic;
 
 namespace Deduction.Proposition.Abstraction
 {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Proposition/Members/And.cs
+
+using System.Collections.Generic;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Parsing;
 

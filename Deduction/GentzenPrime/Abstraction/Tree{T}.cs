@@ -1,4 +1,6 @@
-﻿using System;
+﻿// GentzenPrime/Abstraction/Tree{T}.cs
+
+using System;
 using System.Collections.Generic;
 
 namespace Deduction.GentzenPrime.Abstraction

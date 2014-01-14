@@ -1,4 +1,6 @@
-﻿using System;
+﻿// GentzenPrime/Abstraction/Sequent.cs
+
+using System;
 using System.Collections.Generic;
 using Deduction.Proposition.Abstraction;
 

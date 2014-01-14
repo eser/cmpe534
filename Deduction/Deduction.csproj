@@ -46,7 +46,7 @@
     <Compile Include="GentzenPrime\Abstraction\SequentDirection.cs" />
     <Compile Include="GentzenPrime\Abstraction\BranchDistribution.cs" />
     <Compile Include="GentzenPrime\Abstraction\Sequent.cs" />
-    <Compile Include="GentzenPrime\Abstraction\Tree.cs" />
+    <Compile Include="GentzenPrime\Abstraction\Tree{T}.cs" />
     <Compile Include="GentzenPrime\Abstraction\RuleOperation.cs" />
     <Compile Include="GentzenPrime\Processors\SequentReader.cs" />
     <Compile Include="GentzenPrime\Processors\Falsifier.cs" />

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Proposition/Parsing/Lexer.cs
+
+using System.Collections.Generic;
 
 namespace Deduction.Proposition.Parsing
 {

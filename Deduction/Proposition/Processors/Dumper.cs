@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Proposition/Processors/Dumper.cs
+
+using System.Collections.Generic;
 using System.Text;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Parsing;

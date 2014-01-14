@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Proposition/Members/Equivalence.cs
+
+using System.Collections.Generic;
 using Deduction.Proposition.Abstraction;
 
 namespace Deduction.Proposition.Members

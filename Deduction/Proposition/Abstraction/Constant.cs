@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Proposition/Abstraction/Constant.cs
+
+using System;
 
 namespace Deduction.Proposition.Abstraction
 {

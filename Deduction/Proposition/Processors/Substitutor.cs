@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Proposition/Processors/Substitutor.cs
+
+using System;
 using System.Collections.Generic;
 using Deduction.Proposition.Abstraction;
 using Deduction.Proposition.Parsing;
